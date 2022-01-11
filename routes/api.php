@@ -47,13 +47,13 @@ Route::get('v1/events/{id}', function($id) {
 });
 
 // 4. Create an event
-Route::post('v1/events', [EventController::class, 'store']);
+Route::post('v1/events', [EventController::class, 'apiStore']);
 
 // 5. Create event if not exist, else update the event in idempotent way
-Route::put('v1/events/{id}', [EventController::class, 'update']);
+Route::put('v1/events/{id}', [EventController::class, 'apiUpdate']);
 
 // 6.  Partially update event
-Route::patch('v1/events/{id}', [EventController::class, 'update']);
+Route::patch('v1/events/{id}', [EventController::class, 'apiUpdate']);
 
 // 7. Soft delete an event
-Route::delete('v1/events/{id}', [EventController::class, 'destroy']);
+Route::delete('v1/events/{id}', [EventController::class, 'apiDelete']);
