@@ -26,8 +26,9 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::get('/events',               [EventController::class, 'index']);
-Route::get('/events/{event}',       [EventController::class, 'show']);
 Route::get('/events/create',        [EventController::class, 'create']);
+Route::get('/events/remote',        [EventController::class, 'remote']);
+Route::get('/events/{event}',       [EventController::class, 'show']);
 Route::post('/events',              [EventController::class, 'store']);
 Route::get('/events/{event}/edit',  [EventController::class, 'edit']);
 Route::put('/events/{event}',       [EventController::class, 'update']);

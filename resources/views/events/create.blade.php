@@ -16,17 +16,26 @@
                     
                     <form action="/events" method="post">
                         @csrf
-                        <div class="form-group">
-                            <label for="name">Event Name</label>
-                            <input type="text" id="name" name="name" class="form-control">
+                        <div class="row mb-3">
+                            <label for="name" class="col-sm-2 col-form-label">Event Name</label>
+                            <div class="col-sm-10">
+                                <input type="text" id="name" name="name" class="form-control" autofocus>
+                            </div>
                         </div>
 
-                        <div class="form-group">
-                            <label for="slug">Slug</label>
-                            <input type="text" id="slug" name="slug" class="form-control">
+                        <div class="row mb-3">
+                            <label for="slug" class="col-sm-2 col-form-label">Slug</label>
+                            <div class="col-sm-10">
+                                <input type="text" id="slug" name="slug" class="form-control">
+                            </div>
                         </div>
 
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <div class="row mb-3">
+                            <div class="col-sm-10 offset-sm-2">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                                <a href="/events" class="btn btn-warning">Cancel</a>
+                            </div>
+                        </div>
                     </form>
                     
                 </div>
