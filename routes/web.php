@@ -31,3 +31,7 @@ Route::post('events/search',        [EventController::class, 'search_event_web']
 Route::get('/cache',                [EventController::class, 'event_list_cache'])->name('event_list_cache');
 Route::get('/remote',               [EventController::class, 'event_list_remote'])->name('event_list_remote');
 
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

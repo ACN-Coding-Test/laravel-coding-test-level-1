@@ -139,8 +139,12 @@ class EventController extends BaseController
     
     public function event_edit_web($id)
     {
-        $event = Event::findOrFail($id);
-        return view('event.event_edit', compact('event'));       
+        if(Auth::check()) {
+            $event = Event::findOrFail($id);
+            return view('event.event_edit', compact('event'));
+        }else{
+            return redirect()->route('login');
+        }   
     }
 
     public function event_name_exist(Request $request)
@@ -167,7 +171,11 @@ class EventController extends BaseController
     
     public function event_create_web()
     {       
-        return view('event.event_create');
+        if(Auth::check()) {
+            return view('event.event_create');
+        }else{
+            return redirect()->route('login');
+        } 
     }
 
     public function delete_event_web(Request $request)
@@ -198,6 +206,33 @@ class EventController extends BaseController
             'events' => $event,
             'search' => '1',
         ]);    
+    }
+
+    public function event_list_cache()
+    {
+        $cachedBlog = Redis::get('event');
+        if(isset($cachedBlog)) {
+            $event = json_decode($cachedBlog, FALSE);      
+            return response()->json([
+                'status_code' => 201,
+                'message'     => 'Fetched from redis',
+                'data'        => $event,
+            ]);
+        }else {
+            $event = Event::orderBy('createdAt', 'desc')->paginate($this->pagination_limit);
+            Redis::set('event', $event);
+      
+            return response()->json([
+                'status_code' => 201,
+                'message'     => 'Fetched from database',
+                'data'        => $event,
+            ]);
+        }        
+    }
+
+    public function event_list_remote()
+    {
+        return view('event.remote_list');
     }
 }
 
