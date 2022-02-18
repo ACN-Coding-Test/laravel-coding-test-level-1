@@ -108,6 +108,7 @@ return [
     |
     */
 
+    // Change to Malaysia's locale
     'faker_locale' => 'ms_MY',
 
     /*

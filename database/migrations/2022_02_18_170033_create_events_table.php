@@ -20,9 +20,12 @@ return new class extends Migration
             $table->uuid('id')->default($uuid)->unique()->primary();
             $table->string('name');
             $table->string('slug')->unique();
+            $table->dateTime('startAt')->nullable();
+            $table->dateTime('endAt')->nullable();
             $table->dateTime('createdAt')->useCurrent()->nullable($value = false);
             $table->dateTime('updatedAt')->useCurrent()->useCurrentOnUpdate()->nullable($value = false);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

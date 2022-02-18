@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Event;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -22,12 +23,16 @@ class EventFactory extends Factory
     {
         $name = $this->faker->name();
         $slug = Str::slug($name, '-');
-        $createdAt = $this->faker->dateTime;
-        $updatedAt = $this->faker->dateTime;
+        $createdAt = $this->faker->dateTimeThisDecade('-3 years');
+        $updatedAt = $this->faker->dateTimeBetween($createdAt, Carbon::now());
+        $startAt = $this->faker->dateTimeBetween($createdAt, '+5 years');
+        $endAt = $this->faker->dateTimeBetween($startAt, '+5 years');
 
         return [
             'name' => $name,
             'slug' => $slug,
+            'startAt' => $startAt,
+            'endAt' => $endAt,
             'createdAt' => $createdAt,
             'updatedAt' => $updatedAt
         ];

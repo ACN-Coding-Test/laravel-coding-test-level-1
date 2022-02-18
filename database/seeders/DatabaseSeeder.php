@@ -15,10 +15,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
-
+        // Return 5 dummy events
         Event::factory()
-            ->times(5)
+            ->times(10)
             ->create();
     }
 }
