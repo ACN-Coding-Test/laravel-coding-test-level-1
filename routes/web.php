@@ -16,17 +16,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
-
 Auth::routes();
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::group([
+Route::group(
+  [
+  
     'namespace' => 'Event',
     'prefix' => 'events',
     'as' => 'events.',
-], function () {
+  
+  ], function () {
+  
     // Show all events
     Route::get('', [EventController::class, 'index'])->name('index');
     Route::get('create', [EventController::class, 'create'])->name('create')->middleware('auth');
@@ -39,17 +41,18 @@ Route::group([
     // Redis
     Route::get('{id}/cached', [EventController::class, 'cachedEventView'])->name('cache');
 
-    // External API
-    // Route::get('api', [EventController::class, 'fetchExternalApi'])->name('api');
 });
 
 Route::group(
     [
+      
         'namespace' => 'ExternalApi',
-        'prefix' => 'externalapi',
+        'prefix' => 'external-api',
         'as' => 'externalapi.',
-    ],
-    function () {
+      
+    ], function () {
+      
         Route::get('', [ExternalApiController::class, 'index'])->name('index');
+      
     }
 );

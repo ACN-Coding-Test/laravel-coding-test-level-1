@@ -170,7 +170,7 @@ class EventController extends Controller
         //     'message' => 'User updated',
         //     'data' => $event,
         // ]);
-
+      
         return redirect()->route('events.index')->with('primary', 'Event has been updated.');
     }
 
@@ -182,8 +182,7 @@ class EventController extends Controller
      */
     public function destroy($id)
     {
-        $event = Event::where('id', $id)
-            ->delete();
+        $event = Event::where('id', $id)->delete();
         Redis::del('event_' . $id);
 
         // return response()->json([
