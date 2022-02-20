@@ -22,6 +22,7 @@ class EventFactory extends Factory
 
     public function definition()
     {
+
         $name = $this->faker->name();
         $slug = Str::slug($name, '-');
         $start_at = Carbon::now();
