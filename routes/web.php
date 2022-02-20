@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\EventController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +14,23 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
 Route::get('/', function () {
-    return view('welcome');
+    return view('home');
+});
+
+Route::group([
+    'namespace' => 'Event',
+    'prefix' => 'events',
+    'as' => 'events.',
+], function () {
+
+    // Show all events
+    Route::get('/', [EventController::class, 'index'])->name('index');
+
+    Route::patch('/update/{id}', [EventController::class, 'update'])->name('update');
+    Route::delete('/delete/{id}', [EventController::class, 'destroy'])->name('destroy');
 });

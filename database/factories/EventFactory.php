@@ -21,7 +21,7 @@ class EventFactory extends Factory
      */
     public function definition()
     {
-        $name = $this->faker->name();
+        $name = str_replace(".", "", $this->faker->sentence(5));
         $slug = Str::slug($name, '-');
         $createdAt = $this->faker->dateTimeThisDecade('-3 years');
         $updatedAt = $this->faker->dateTimeBetween($createdAt, Carbon::now());
