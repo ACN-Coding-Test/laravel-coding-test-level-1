@@ -26,17 +26,17 @@
                         @csrf
                         <div class="form-group">
                             <label for="name">Event Name</label>
-                            <input type="text" name="name" class="form-control" placeholder="Enter Event Name" />
+                            <input type="text" name="name" class="form-control" placeholder="Enter Event Name" required/>
                         </div>
                             <br>
                         <div class="form-group">
                             <label for="start_at">Event Start At</label>
-                             <input type="date" name="start_at">
+                             <input type="date" name="start_at" required>
                         </div>
                             <br>
                         <div class="form-group">
                             <label for="start_at">Event End At</label>
-                             <input type="date" name="end_at">
+                             <input type="date" name="end_at" required>
                         </div>
                         <br>
 

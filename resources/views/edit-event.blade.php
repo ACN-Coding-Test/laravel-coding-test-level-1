@@ -27,17 +27,17 @@
                         <input type="hidden" name="id" value="{{ $event->id}}">
                         <div class="form-group">
                             <label for="name">Event Name</label>
-                            <input type="text" name="name" class="form-control" placeholder="Enter Event Name" value="{{ $event->name}}" />
+                            <input type="text" name="name" class="form-control" placeholder="Enter Event Name" value="{{ $event->name}}" required/>
                         </div>
                             <br>
                         <div class="form-group">
                             <label for="start_at">Event Start At</label>
-                             <input type="date" name="start_at" value="{{ $event->start_at}}">
+                             <input type="date" name="start_at"  required>
                         </div>
                             <br>
                         <div class="form-group">
                             <label for="start_at">Event End At</label>
-                             <input type="date" name="end_at" value="{{ $event->end_at}}">
+                             <input type="date" name="end_at"  required>
                         </div>
                         <br>
 
