@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\V1\EventResource;
+use Illuminate\Support\Facades\Validator;
 use Symfony\Component\Console\Input\Input;
 use App\Http\Controllers\BaseApiController;
 
@@ -62,14 +63,24 @@ class EventApiController extends BaseApiController
     public function store(Request $request)
     {
         try {
-            $event = new Event();
-            $event->name = $request->name;
-            $event->slug = Str::slug($request->name, '-');
-            $event->start_at = $request->start_at;
-            $event->end_at = $request->end_at;
+            $rules = array(
+                "name" => "required",
+                "start_at" => "required",
+                "end_at" => "required"
+            );
+            $validator = Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                return $validator->errors();
+            } else {
+                $event = new Event();
+                $event->name = $request->name;
+                $event->slug = Str::slug($request->name, '-');
+                $event->start_at = $request->start_at;
+                $event->end_at = $request->end_at;
 
-            if ($event->save()) {
-                return new EventResource($event);
+                if ($event->save()) {
+                    return new EventResource($event);
+                }
             }
         } catch (\Illuminate\Database\QueryException $e) {
             throw new \Exception('Error Please Contact Administrator');
@@ -101,14 +112,24 @@ class EventApiController extends BaseApiController
     public function edit(Request $request, $id)
     {
         try {
-            $event = Event::findOrFail($id);
-            $event->name = $request->name;
-            $event->slug = Str::slug($request->name, '-');
-            $event->start_at = $request->start_at;
-            $event->end_at = $request->end_at;
+            $rules = array(
+                "name" => "required",
+                "start_at" => "required",
+                "end_at" => "required"
+            );
+            $validator = Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                return $validator->errors();
+            } else {
+                $event = Event::findOrFail($id);
+                $event->name = $request->name;
+                $event->slug = Str::slug($request->name, '-');
+                $event->start_at = $request->start_at;
+                $event->end_at = $request->end_at;
 
-            if ($event->save()) {
-                return new EventResource($event);
+                if ($event->save()) {
+                    return new EventResource($event);
+                }
             }
         } catch (\Illuminate\Database\QueryException $e) {
             throw new \Exception('Error Please Contact Administrator');
@@ -125,18 +146,28 @@ class EventApiController extends BaseApiController
     public function update(Request $request, $id)
     {
         try {
-            $event = Event::updateOrCreate(
-                ['slug' => Str::slug($request->name, '-')],
-                [
-                    'name' => $request->name,
-                    'start_at' => $request->start_at,
-                    'end_at' => $request->end_at
-                ],
-
+            $rules = array(
+                "name" => "required",
+                "start_at" => "required",
+                "end_at" => "required"
             );
+            $validator = Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                return $validator->errors();
+            } else {
+                $event = Event::updateOrCreate(
+                    ['slug' => Str::slug($request->name, '-')],
+                    [
+                        'name' => $request->name,
+                        'start_at' => $request->start_at,
+                        'end_at' => $request->end_at
+                    ],
 
-            if ($event->save()) {
-                return new EventResource($event);
+                );
+
+                if ($event->save()) {
+                    return new EventResource($event);
+                }
             }
         } catch (\Illuminate\Database\QueryException $e) {
             throw new \Exception('Error Please Contact Administrator');
