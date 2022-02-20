@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Event;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
 class EventController extends Controller
@@ -13,7 +15,8 @@ class EventController extends Controller
      */
     public function index()
     {
-        //
+        $events = Event::orderBy('id', 'DESC')->get();
+        return view('events', compact('events'));
     }
 
     /**
@@ -23,7 +26,7 @@ class EventController extends Controller
      */
     public function create()
     {
-        //
+        return view('add-event');
     }
 
     /**
@@ -34,7 +37,16 @@ class EventController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $event = new Event();
+        $slug = Str::slug($request->name, '-');
+
+        $event->name = $request->name;
+        $event->slug = $slug;
+        $event->start_at = $request->start_at;
+        $event->end_at = $request->end_at;
+
+        $event->save();
+        return back()->with('event_created', 'Event has been created successfully!');
     }
 
     /**
@@ -45,7 +57,8 @@ class EventController extends Controller
      */
     public function show($id)
     {
-        //
+        $event = Event::where('id', $id)->first();
+        return view('single-event', compact('event'));
     }
 
     /**
@@ -56,7 +69,8 @@ class EventController extends Controller
      */
     public function edit($id)
     {
-        //
+        $event = Event::find($id);
+        return view('edit-event', compact('event'));
     }
 
     /**
@@ -68,7 +82,17 @@ class EventController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $event = Event::find($id);
+
+        $slug = Str::slug($request->name, '-');
+
+        $event->name = $request->name;
+        $event->slug = $slug;
+        $event->start_at = $request->start_at;
+        $event->end_at = $request->end_at;
+
+        $event->save();
+        return back()->with('event_updated', 'Event has been updated successfully!');
     }
 
     /**
@@ -79,6 +103,7 @@ class EventController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Event::where('id', $id)->delete();
+        return back()->with('event_deleted', 'Event has been deleted successfully!');
     }
 }
