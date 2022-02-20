@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\API\BaseController as BaseController;
 use App\Event;
@@ -17,7 +18,7 @@ class EventController extends BaseController
      */
     public function showAllEvent()
     {
-        $events = Event::all();
+        $events = Event::paginate(10);
 
 
         return $this->sendResponse($events->toArray(), 'Events retrieved successfully.');
@@ -65,7 +66,7 @@ class EventController extends BaseController
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function save(Request $request)
     {
         $input = $request->all();
 
@@ -165,7 +166,7 @@ class EventController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function softDelete($id)
     {
         $event = Event::findOrFail($id);
 
@@ -173,5 +174,56 @@ class EventController extends BaseController
 
 
         return $this->sendResponse($event->toArray(), 'Event deleted successfully.');
+    }
+
+    // Call internal API
+    public function index()
+    {
+        $request = Request::create('/api/v1/events', 'GET');
+        $response = Route::dispatch($request);
+
+        $responseBody = json_decode($response->getContent(), true);
+
+        $events = $responseBody["data"]["data"];
+        // dd($events);
+
+        $pagination = $responseBody["data"];
+        // dd($pagination);
+
+        return view('events.index', compact('events','pagination'));
+    }
+
+    public function show($id)
+    {
+        // $request = Request::create('/api/v1/events/'.$id, 'GET');
+        // $response = Route::dispatch($request);
+
+        // $responseBody = json_decode($response->getContent(), true);
+
+        // $events = $responseBody["data"];
+        // // dd($events);
+
+        $events = Event::findOrFail($id);
+        
+        
+        return view('events.show', compact('events'));
+    }
+
+    public function create()
+    {
+        return view('events.create');
+    }
+
+    public function store(Request $request)
+    {
+        $name = $request->name;
+        $slug = $request->slug;
+
+
+        $request = Request::create('/api/v1/events?name='.$name.'&slug='.$slug, 'POST');
+
+        dd($request);
+
+        return redirect()->route('events.index');
     }
 }

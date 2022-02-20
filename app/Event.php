@@ -13,4 +13,5 @@ class Event extends Model
     ];
 
     use SoftDeletes;
+
 }

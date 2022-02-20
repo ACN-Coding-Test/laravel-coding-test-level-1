@@ -14,3 +14,8 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+Route::resource('events','EventController');
+
+Route::get('/search/', 'EventController@search')->name('search');

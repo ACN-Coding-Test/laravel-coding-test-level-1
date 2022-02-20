@@ -25,11 +25,11 @@ $router->group(['prefix' => 'v1'], function () use ($router) {
 
   $router->get('events/{id}', ['uses' => 'API\EventController@showOneEvent']);
 
-  $router->post('events',  ['uses' => 'API\EventController@store']);
+  $router->post('events',  ['uses' => 'API\EventController@save']);
 
   $router->put('events/{id}', ['uses' => 'API\EventController@put']);
 
   $router->patch('events/{id}', ['uses' => 'API\EventController@patch']);
 
-  $router->delete('events/{id}', ['uses' => 'API\EventController@destroy']);
+  $router->delete('events/{id}', ['uses' => 'API\EventController@softDelete']);
 });
