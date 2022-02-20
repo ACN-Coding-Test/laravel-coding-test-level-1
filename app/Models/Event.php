@@ -21,6 +21,7 @@ class Event extends Model
         'updatedAt'
     ];
 
+    // Set that id is in string, not integer
     protected $casts = [
         'id' => 'string'
     ];
