@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\EventCreated;
 use App\Models\Event;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Str;
-use Symfony\Component\Console\Input\Input;
+use Symfony\Component\HttpFoundation\Response;
 
 class EventController extends Controller
 {
@@ -18,7 +22,7 @@ class EventController extends Controller
     {
         if (empty($request->query)) {
 
-            $events = Event::orderBy('startAt')->paginate(5);
+            $events = Event::orderBy('createdAt')->paginate(5);
 
             return view('events.index', compact('events'));
         } else {
@@ -28,7 +32,7 @@ class EventController extends Controller
                 ->orWhere('slug', 'like', '%' . $query . '%')
                 ->orWhere('startAt', 'like', '%' . $query . '%')
                 ->orWhere('endAt', 'like', '%' . $query . '%')
-                // ->get()
+                ->orderBy('createdAt', 'desc')
                 ->paginate(5);
 
             return view('events.index', compact('events'));
@@ -42,7 +46,7 @@ class EventController extends Controller
      */
     public function create()
     {
-        //
+        return view('events.create');
     }
 
     /**
@@ -53,7 +57,46 @@ class EventController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|max:255',
+            'startAt_date' => 'required',
+            'startAt_time' => 'required',
+            'endAt_date' => 'required',
+            'endAt_time' => 'required'
+        ]);
+
+        $checkSlug = Str::slug($request->name, '-');
+        $checkSlugExists = Event::where('slug', $checkSlug)->first();
+        if ($checkSlugExists) {
+            $generateSlug = $checkSlug . '-' . rand(10, 99);
+        } else {
+            $generateSlug = $checkSlug;
+        }
+
+        $event = array(
+            'name' => $request->name,
+            'slug' => $generateSlug,
+            'startAt' => $request->startAt_date . ' ' . $request->startAt_time . ':00',
+            'endAt' => $request->endAt_date . ' ' . $request->endAt_time . ':00',
+        );
+        Event::create($event);
+
+        // Send new event created notification as email
+        $email = 'new@event.my';
+        $eventData = [
+            'name' => $request->name,
+            'slug' => $generateSlug,
+            'startAt' => $request->startAt_date . ' ' . $request->startAt_time . ':00',
+            'endAt' => $request->endAt_date . ' ' . $request->endAt_time . ':00',
+        ];
+
+        Mail::to($email)->send(new EventCreated($eventData));
+
+        // return response()->json([
+        //     'message' => 'Mail has sent.'
+        // ], Response::HTTP_OK);
+
+        return redirect()->route('events.index')->with('primary', 'Event has been created.');
     }
 
     /**
@@ -64,7 +107,9 @@ class EventController extends Controller
      */
     public function show($id)
     {
-        //
+        $event = Event::where('id', $id)->first();
+
+        return view('events.show', compact('event'));
     }
 
     /**
@@ -75,7 +120,9 @@ class EventController extends Controller
      */
     public function edit($id)
     {
-        //
+        $event = Event::where('id', $id)->first();
+
+        return view('events.edit', compact('event'));
     }
 
     /**
@@ -114,6 +161,16 @@ class EventController extends Controller
 
         $event->update($data);
 
+        // Redis recache
+        Redis::del('event_' . $id);
+        Redis::set('event_' . $id, $event);
+
+        // return response()->json([
+        //     'status_code' => 201,
+        //     'message' => 'User updated',
+        //     'data' => $event,
+        // ]);
+      
         return redirect()->route('events.index')->with('primary', 'Event has been updated.');
     }
 
@@ -125,9 +182,37 @@ class EventController extends Controller
      */
     public function destroy($id)
     {
-        $event = Event::where('id', $id)
-            ->delete();
+        $event = Event::where('id', $id)->delete();
+        Redis::del('event_' . $id);
+
+        // return response()->json([
+        //     'status_code' => 201,
+        //     'message' => 'Blog deleted'
+        // ]);
 
         return redirect()->route('events.index')->with('primary', 'Event has been deleted.');
+    }
+
+    public function cachedEventView($id)
+    {
+        $cachedEvent = Redis::get('event_' . $id);
+        if (isset($cachedEvent)) {
+            $event = json_decode($cachedEvent, FALSE);
+
+            return response()->json([
+                'status_code' => 201,
+                'message' => 'Fetched from Redis',
+                'data' => $event,
+            ]);
+        } else {
+            $event = Event::find($id);
+            Redis::set('event_' . $id, $event);
+
+            return response()->json([
+                'status_code' => 201,
+                'message' => 'Fetched from database',
+                'data' => $event,
+            ]);
+        }
     }
 }

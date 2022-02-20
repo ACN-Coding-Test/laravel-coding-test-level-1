@@ -1,9 +1,17 @@
-@extends('home')
+@extends('layouts.app')
 
 @section('content')
-
 <div class="py-4 my-4">
-    <h2 class="card-title"><strong>Events</strong></h2>
+    <h2 class="card-title">
+        <strong>Events</strong>
+        @if(Auth::check())
+        <span class="float-end">
+            <a href="{{ route('events.create') }}" class="btn btn-primary">
+                <i class="fas fa-plus"></i>&nbsp; New Event
+            </a>
+        </span>
+        @endif
+    </h2>
 
     <div class="search-field py-4">
         <form action="" method="GET">
@@ -88,12 +96,20 @@
                     </td>
                     <td class="text-end align-middle">
                         <div class="btn-group" role="group" aria-label="Basic example">
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#edit{{substr($event->id,0,7)}}">
+                            <a href="{{ route('events.show', $event->id) }}" class="btn btn-primary">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            @if(Auth::check())
+                            <a href="{{ route('events.edit', $event->id) }}" class="btn btn-info">
                                 <i class="fas fa-edit"></i>
-                            </button>
-                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete{{substr($event->id,0,7)}}">
+                            </a>
+                            <!-- <a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#edit{{substr($event->id,0,7)}}">
+                                <i class="fas fa-edit"></i>
+                            </a> -->
+                            <a class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete{{substr($event->id,0,7)}}">
                                 <i class="fas fa-trash"></i>
-                            </button>
+                            </a>
+                            @endif
                         </div>
                     </td>
                 </tr>
@@ -106,95 +122,95 @@
         {!! $events->links() !!}
     </div>
 
-    <!-- Modal starts here -->
-    @foreach($events as $event)
-    <div class="modal fade" id="edit{{substr($event->id,0,7)}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <form action="{{ route('events.update', ['id' => $event->id]) }}" method="POST">
-                @csrf
-                @method('PATCH')
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Edit</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label for="event-name" class="form-label">
-                                Event Name
-                            </label>
-                            <input type="text" class="form-control" id="event-name" name="name" required value="{{ $event->name }}">
-                        </div>
-                        <div class="mb-3">
-                            <label for="start-at" class="form-label">
-                                Start At
-                            </label>
-                            <div class="row">
-                                <div class="col-6">
-                                    <input type="date" class="form-control" id="start-at" name="startAt_date" required value="{{ date('Y-m-d', strtotime($event->startAt)) }}">
-                                </div>
-                                <div class="col-6">
-                                    <input type="time" class="form-control" name="startAt_time" required value="{{ date('H:i', strtotime($event->startAt)) }}">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="end-at" class="form-label">
-                                End At
-                            </label>
-                            <div class="row">
-                                <div class="col-6">
-                                    <input type="date" class="form-control" id="end-at" name="endAt_date" required value="{{ date('Y-m-d', strtotime($event->endAt)) }}">
-                                </div>
-                                <div class="col-6">
-                                    <input type="time" class="form-control" name="endAt_time" required value="{{ date('H:i', strtotime($event->endAt)) }}">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">
-                            <i class="fas fa-close"></i>&nbsp; Close
-                        </button>
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-save"></i>&nbsp; Update
-                        </button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-    @endforeach
-
-    @foreach($events as $event)
-    <div class="modal fade" id="delete{{substr($event->id,0,7)}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <form action="{{ route('events.destroy', ['id' => $event->id]) }}" method="POST">
-                @csrf
-                @method('DELETE')
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Delete</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        Are you sure to delete this event?
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">
-                            <i class="fas fa-times"></i>&nbsp; Cancel
-                        </button>
-                        <button type="submit" class="btn btn-danger">
-                            <i class="fas fa-trash"></i>&nbsp; Delete
-                        </button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-    @endforeach
-    <!-- Modal ends here -->
-
 </div>
+
+<!-- Modal starts here -->
+@foreach($events as $event)
+<div class="modal fade" id="edit{{substr($event->id,0,7)}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <form action="{{ route('events.update', ['id' => $event->id]) }}" method="POST">
+            @csrf
+            @method('PATCH')
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Edit</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="event-name" class="form-label">
+                            Event Name
+                        </label>
+                        <input type="text" class="form-control" id="event-name" name="name" required value="{{ $event->name }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="start-at" class="form-label">
+                            Start At
+                        </label>
+                        <div class="row">
+                            <div class="col-6">
+                                <input type="date" class="form-control" id="start-at" name="startAt_date" required value="{{ date('Y-m-d', strtotime($event->startAt)) }}">
+                            </div>
+                            <div class="col-6">
+                                <input type="time" class="form-control" name="startAt_time" required value="{{ date('H:i', strtotime($event->startAt)) }}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="end-at" class="form-label">
+                            End At
+                        </label>
+                        <div class="row">
+                            <div class="col-6">
+                                <input type="date" class="form-control" id="end-at" name="endAt_date" required value="{{ date('Y-m-d', strtotime($event->endAt)) }}">
+                            </div>
+                            <div class="col-6">
+                                <input type="time" class="form-control" name="endAt_time" required value="{{ date('H:i', strtotime($event->endAt)) }}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+                        <i class="fas fa-close"></i>&nbsp; Close
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i>&nbsp; Update
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+@endforeach
+
+@foreach($events as $event)
+<div class="modal fade" id="delete{{substr($event->id,0,7)}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form action="{{ route('events.destroy', ['id' => $event->id]) }}" method="POST">
+            @csrf
+            @method('DELETE')
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Delete</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure to delete this event?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+                        <i class="fas fa-times"></i>&nbsp; Cancel
+                    </button>
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash"></i>&nbsp; Delete
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+@endforeach
+<!-- Modal ends here -->
 
 @endsection
