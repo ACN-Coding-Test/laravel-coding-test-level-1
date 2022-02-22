@@ -56,8 +56,10 @@ class EventController extends Controller
             'slug' => $request->slug
         );  
 
-
-        Event::create($data);
+            // Send Email
+            $email = 'sudipta.patra2@gmail.com';
+            Mail::to($email)->send(new EventMail($data));
+                    Event::create($data);
 
         return redirect()->route('events.index')->with('success','Event Created Successfully');
     }
@@ -151,7 +153,6 @@ class EventController extends Controller
         $responseBody = json_decode($response, true);
 
         $randoms = $responseBody["entries"];
-        // dd($categories);
 
         return view('events.external', compact('randoms'));
     }
