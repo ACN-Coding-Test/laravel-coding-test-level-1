@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Event2Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -24,3 +25,6 @@ Route::get('/', function () {
 // Route::get('/events/{id}/edit',[Event2Controller::class, 'edit']);
 Route::resource('events', Event2Controller::class);
 Route::get('/search/', [Event2Controller::class, 'search'])->name('search');
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\EventMail;
 use Illuminate\Http\Request;
 use App\Models\Event;
 use Carbon\Carbon;
 use DateTime;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Redis;
 
 class Event2Controller extends Controller
 {
@@ -14,7 +17,7 @@ class Event2Controller extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         //Retrieve all data from event table
         $events = Event::simplePaginate(3)->appends(request()->query());
@@ -54,8 +57,9 @@ class Event2Controller extends Controller
             'startAt' => $request->startAt.' '.$currentDate->toTimeString(), //Adding time in format to match the database date format
             'endAt' => $request->endAt.' '.$currentDate->toTimeString() //Adding time in format to match the database date format
         ]);
-        $event->save();
-        return redirect('/events')->with('success', 'Event saved!');
+        $event->save();        
+        $this->sendEmail();
+        return redirect('/events')->with('success', 'Event saved and Email sent!');
     }
 
     /**
@@ -136,5 +140,12 @@ class Event2Controller extends Controller
     
         // Return the search view with the results compacted
         return view('events.index', compact('events'));
+    }
+    public static function sendEmail(){
+        $email_details = [
+            'title' => 'Test Email',
+            'body' => 'This email will be sent after event registration.'
+        ];
+        Mail::to('gleztin1@gmail.com')->send(new EventMail($email_details));
     }
 }
