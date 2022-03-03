@@ -23,7 +23,7 @@ Route::get('/', function () {
 // Route::get('/events/{id}',[Event2Controller::class, 'show']);
 // Route::get('/events/create',[Event2Controller::class, 'create']);
 // Route::get('/events/{id}/edit',[Event2Controller::class, 'edit']);
-Route::resource('events', Event2Controller::class);
+Route::resource('events', Event2Controller::class)->middleware('auth');
 Route::get('/search/', [Event2Controller::class, 'search'])->name('search');
 Auth::routes();
 
