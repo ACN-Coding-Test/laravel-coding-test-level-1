@@ -14,10 +14,17 @@ class EventController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         //
-        return Event::all()->isEmpty() ? 'No event' : Event::all();
+        $pageIndex = !empty($request->pageIndex) ? $request->pageIndex : '';
+        $pageSize = !empty($request->pageSize) ? $request->pageSize : '';
+        if(Event::all()->isEmpty()){
+            return 'No event';
+        }
+        else{
+            return Event::skip($pageIndex*$pageSize)->take($pageSize)->get();
+        }
     }
 
     /**
