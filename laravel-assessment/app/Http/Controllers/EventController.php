@@ -23,7 +23,12 @@ class EventController extends Controller
             return 'No event';
         }
         else{
-            return Event::skip($pageIndex*$pageSize)->take($pageSize)->get();
+            if(empty($pageIndex) && empty($pageSize)){
+                return Event::all();
+            }
+            else{
+                return Event::skip($pageIndex*$pageSize)->take($pageSize)->get();
+            }
         }
     }
 
