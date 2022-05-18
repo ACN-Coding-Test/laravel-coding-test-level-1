@@ -2,31 +2,25 @@
 
 namespace App;
 
+use Attribute;
 use Illuminate\Database\Eloquent\Model;
 
+
 class Event extends Model
-{
+{ 
     
 
 protected $fillable = [
+    'id',
     'name',
     'slug',
+    'startAt',
+    'endAt',
+    'created_at',
+    'updated_at'
 ];
 
-protected $appends = [
-    'createdAt',
-    'updatedAt'
+protected $casts = [
+    'id' => 'string'
 ];
-
-
-public function getCreatedAtAttribute()
-{
-    return $this->created_at;
-}
-
-public function getUpdatedAtAttribute()
-{
-    return $this->updated_at;
-}
-
 }

@@ -20,6 +20,7 @@ class CreateEventsTable extends Migration
             $table->timestamp('startAt')->nullable();
             $table->timestamp('endAt')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

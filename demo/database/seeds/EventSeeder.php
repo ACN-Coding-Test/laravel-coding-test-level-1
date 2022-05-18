@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use App\Event;
 
 class EventSeeder extends Seeder
 {
@@ -11,6 +12,6 @@ class EventSeeder extends Seeder
      */
     public function run()
     {
-        //
+        
     }
 }
