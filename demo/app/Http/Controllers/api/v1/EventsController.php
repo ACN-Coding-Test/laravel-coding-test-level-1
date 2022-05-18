@@ -21,7 +21,13 @@ class EventsController extends Controller
     public function index(Request $request)
     {
     
-        return new EventCollection(Event::paginate());
+        // return new EventCollection(Event::paginate());
+        return new EventCollection(Event::all());    
+    }
+
+
+    public function activeEvents(){
+        return new EventCollection(Event::whereDate('startAt','<=',now())->whereDate('endAt','>',now())->get());
     }
 
     /**
@@ -60,6 +66,8 @@ class EventsController extends Controller
         $event=   Event::create($validatedData);
         return new EventResource($event);
     }
+
+
 
     /**
      * Display the specified resource.

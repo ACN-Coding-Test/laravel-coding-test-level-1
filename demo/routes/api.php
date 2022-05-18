@@ -19,5 +19,5 @@ use Illuminate\Support\Facades\Route;
 // });
 
 
-
+Route::get('v1/events/active-events','api\v1\EventsController@activeEvents')->name('events.active_events');
 Route::apiResource('v1/events','api\v1\EventsController');
