@@ -10,39 +10,47 @@ use App\Models\Event;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class EventsApiController extends Controller
+class EventsController extends Controller
 {
+    
     public function index()
     {
-        return new EventResource(Event::all());
+        $events = Event::all();
+        return view('events.index', compact('events'));
+    }
+
+    public function create()
+    {
+        return view('events.create');
     }
 
     public function store(StoreEventRequest $request)
     {
         $event = new Event;
         $event->storeEvent($request);
-        return (new EventResource($event))
-            ->response()
-            ->setStatusCode(Response::HTTP_CREATED);
+        return redirect()->route('events.index')->with('success','Event created successfully!');
     }
 
     public function show(Event $event)
     {
-        return new EventResource($event);
+        return view('events.show', compact('event'));
+    }
+
+    public function edit(Event $event)
+    {
+        return view('events.edit', compact('event'));
     }
 
     public function update(UpdateEventRequest $request, Event $event)
     {
         $event->updateEvent($event, $request);
-        return (new EventResource($event))
-            ->response()
-            ->setStatusCode(Response::HTTP_ACCEPTED);
+        return redirect()->route('events.index')->with('success','Event updated successfully!');
     }
 
     public function destroy(Event $event)
     {
         $event->delete();
-        return response(null, Response::HTTP_NO_CONTENT);
+        return redirect()->route('events.index')->with('success','Event deleted successfully!');
     }
 
     public function activeEvents()

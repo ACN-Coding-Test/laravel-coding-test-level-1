@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use App\Traits\UsesUuid;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Cviebrock\EloquentSluggable\Services\SlugService;
+use Illuminate\Support\Carbon;
 
 class Event extends Model
 {
@@ -22,12 +24,34 @@ class Event extends Model
         'endAt'
        ];
        
-       public function sluggable()
-       {
-           return [
-               'slug' => [
-                   'source' => 'name'
-               ]
-           ];
-       }
+    public function sluggable()
+    {
+        return [
+            'slug' => [
+                'source' => 'name'
+            ]
+        ];
+    }
+
+    public function storeEvent($request)
+    {
+        $slug = SlugService::createSlug(Event::class, 'slug', $request->name);
+        $event = [
+                    'name' => $request->name,
+                    'slug' => $slug,
+                    'startAt' => Carbon::parse($request->startAt),
+                    'endAt' => Carbon::parse($request->startAt),
+                ];
+        return Event::create($event);
+    }
+
+    public static function updateEvent($event, $request)
+    {
+        $events = [
+            'name' => $request->name,
+            'startAt' => Carbon::parse($request->startAt),
+            'endAt' => Carbon::parse($request->startAt),
+        ];
+        return $event->update($events);
+    }
 }
