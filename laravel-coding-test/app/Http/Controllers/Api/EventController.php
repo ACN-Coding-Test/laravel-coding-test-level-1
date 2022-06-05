@@ -1,16 +1,50 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Event;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
+use DataTables;
 
 class EventController extends Controller
 {
     public function getAllEvents(){
-        return response()->json(Event::all(), 200);
+
+        $events = Event::all();
+
+        return Datatables::of($events)
+            ->addIndexColumn()
+            ->addColumn('action', function($row){
+                return $this->getActionColumn($row);
+            })
+            ->rawColumns(['action'])
+            ->make(true);
+    }
+
+    protected function getActionColumn($data): string {
+        
+        // $editUrl = route('admin.shop.collection.edit', $data['id']);
+        $editUrl = route('events.edit', $data->id);
+        $data_id = $data->id;
+        // $data_href = route('public.shop.collection-item-list', $data['slug']);
+        $data_href = '#';
+        $data_name = $data->name;
+        // $data_item_count = count($data['items']);
+        $data_item_count = '';
+        $deleteUrl = route('events.delete-events', $data->id);
+
+        // $preview_buton = "<a target='_blank' class='waves-effect btn-sm btn-secondary' href='$data_href'>Preview</a>";
+        $edit_button = "<a class='waves-effect btn-sm btn-primary' href='$editUrl'>Edit</a>";
+        $delete_button = "<a class='btn-sm btn-danger dt-delete-btn' data-id='$data_id' data-name='$data_name' data-count-item='$data_item_count' href='$deleteUrl'>Delete</a>";
+
+        $res = $edit_button . " ";
+        $res = $res . $delete_button;
+
+        return $res;
+
     }
 
     public function getActiveEvents(){
@@ -38,18 +72,19 @@ class EventController extends Controller
 
     public function addEvent(Request $request){
         $uuid = Str::uuid()->toString();
+        $now = Carbon::now()->format('Y-m-d H:i:s');
 
         $event = Event::create([
                                 'id' => $uuid,
                                 'name' => $request->name,
                                 'slug' => $request->slug,
-                                'createdAt' => $request->createdAt,
-                                'updatedAt' => $request->updatedAt,
+                                'createdAt' => $now,
+                                'updatedAt' => $now,
                                 'startAt' => $request->startAt,
                                 'endAt' => $request->endAt,
                                 ]);
 
-        return response($event, 201);
+        return redirect('/events');
     }
 
     public function updateEvent(Request $request, $id){
@@ -68,7 +103,7 @@ class EventController extends Controller
             'endAt' => $request->endAt,
         ]);
 
-        return response($event, 200);
+        return redirect('/events');
     }
 
     public function partialUpdateEvent(Request $request, $id){
@@ -108,6 +143,6 @@ class EventController extends Controller
         }
 
         $event->delete();
-        return response()->json(['message' => 'Event deleted successfully!', 200]);
+        return view('/events');
     }
 }

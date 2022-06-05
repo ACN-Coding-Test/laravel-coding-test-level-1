@@ -14,6 +14,10 @@ class Event extends Model
 
     protected $table = 'event';
 
+    protected $casts = [
+        'id' => 'string'
+    ];
+    
     protected $fillable = [
         'id',
         'name',
