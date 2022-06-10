@@ -16,8 +16,12 @@ class EventController extends Controller{
     public function get($id = null, $isActiveEventOnly = false){
 
         $response = EventModel::handleBasicGet($id, function($builder) use ($isActiveEventOnly){
+            $name = request()->get('name');
             if($isActiveEventOnly){
                 $builder->where('startAt', '<', now())->where('endAt', '>', now());
+            }
+            if($name){
+                $builder->where('name','ilike',"%$name%");
             }
         });
 
