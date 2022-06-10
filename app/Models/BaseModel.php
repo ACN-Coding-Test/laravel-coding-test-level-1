@@ -70,24 +70,25 @@ abstract class BaseModel extends Model{
                 $extraWhere($builder);
             }
 
-            $builder = $builder->paginate();
 
+            $builder->orderBy("id");
             $response->isSuccess    = true;
             $response->message      = "Fetched successfully";
-            $response->data->events = $builder;
+            $response->data->results = $builder->paginate();;
 
             //# used when not api
             $response->controllerResponse = view();
 
 
             //# to check is api or normal, if normal will return controller respose
-            return Helper::hybridResponse($response);
+            return ($response);
 
 
     }
 
     public static function handleBasicRestFull($id, $nonDeleteValidationCallback = null){
 
+        //# restful by model base, more model no need to do 1 by 1 or worst copy paste, simple CRUD task
 
         $request = request();
         $method  = $request->getMethod();
@@ -122,7 +123,7 @@ abstract class BaseModel extends Model{
         $response->isSuccess    = true;
         $response->message      = "Success $method";
         $response->data->result = $result;
-        return Helper::hybridResponse($response);
+        return ($response);
     }
 
 }

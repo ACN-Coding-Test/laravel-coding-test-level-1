@@ -14,7 +14,7 @@ class EventModelFactory extends Factory
      */
     public function definition()
     {
-        $title = \Illuminate\Support\Str::limit($this->faker->paragraph,10);
+        $title = \Illuminate\Support\Str::limit($this->faker->paragraph,20) . rand(1111,9999);
         $title = trim($title);
         return [
             'name' => $title,

@@ -16,3 +16,12 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::prefix("events")->group(function(){
+    Route::get('{id}/edit', [\App\Http\Controllers\EventController::class, 'form'])->name('events.edit');
+    Route::get('create', [\App\Http\Controllers\EventController::class, 'form'])->name('events.create');
+
+    Route::get('active-events', [\App\Http\Controllers\EventController::class, 'activeEvents'])->name('activeEvents');
+    Route::get('{id?}', [\App\Http\Controllers\EventController::class, 'get'])->name('events.get');
+
+});

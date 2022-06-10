@@ -42,7 +42,17 @@ class EventModel extends BaseModel
 
     public static $restfulController = EventController::class;
 
+
+    protected $dates = ['startAt','endAt'];
     protected $table = "event";
 
+
+    public function __get($key){
+        $value = parent::__get($key);
+        if($key=="startAt" || $key=="endAt"){
+            return $value->format("Y-m-d\TH:i:s");
+        }
+        return $value;
+    }
 
 }

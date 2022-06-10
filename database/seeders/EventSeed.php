@@ -16,9 +16,9 @@ class EventSeed extends Seeder
     {
         //
 
-        if(EventModel::count() <5){
-            EventModel::factory()->count(5)->afterCreating(function($event){
-                if($event->id == EventModel::orderBy('id','desc')->first()->id){
+        if(EventModel::count() <200){
+            EventModel::factory()->count(200)->afterCreating(function($event){
+                if($event->id > 5){
 
                     //# to make is expire
                     $event->endAt = now();
