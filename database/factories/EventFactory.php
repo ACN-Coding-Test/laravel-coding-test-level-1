@@ -15,7 +15,7 @@ class EventFactory extends Factory
     public function definition()
     {
         return [
-            'id' => Str::uuid(),
+            'id' => Str::uuid()->toString(),
             'name' => $this->faker->name(),
             'slug' => $this->faker->unique()->asciify('********************'),
             'startAt' => now(),
