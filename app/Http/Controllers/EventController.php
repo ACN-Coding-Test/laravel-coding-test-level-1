@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-
+use App\Mail\EventCreated;
+use Illuminate\Support\Facades\Mail;
 use App\Models\Event;
 
 class EventController extends Controller
@@ -40,19 +42,27 @@ class EventController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate(
+            array(
+                "start_date" => ['required'],
+                "end_date" => ['required'],
+                "name" => ['required'],
+                "slug" => ['required','unique:events'],
+            )
+        );
         //
         $event =   Event::create(
             [
                 'id' => Str::uuid()->toString(),
                 'name' => $request->name,
                 'slug' => $request->slug,
-                'startAt' => date("Y-m-d H:i:s", strtotime($request->start_at)),
-                'endAt' => date("Y-m-d H:i:s", strtotime($request->end_at)),
+                'startAt' => date("Y-m-d H:i:s", strtotime($request->start_date)),
+                'endAt' => date("Y-m-d H:i:s", strtotime($request->end_date)),
                 'createdAt' => now(),
                 'updatedAt' => now(),
             ]
         );
-
+        Mail::to($request->user())->send(new EventCreated($event));
         return redirect()->route("events.index");
     }
 
@@ -81,7 +91,7 @@ class EventController extends Controller
     {
         //
         $event = Event::find($id);
-        return view("events.edit", compact($event));
+        return view("events.edit", compact("event"));
     }
 
     /**
@@ -94,13 +104,24 @@ class EventController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $request->validate(
+            array(
+                "start_date" => ['required'],
+                "end_date" => ['required'],
+                "name" => ['required'],
+                "slug" => ['required','unique:events'],
+            )
+        );
+       
         $event = Event::find($id);
-        $event->startAt = $request->start_at? $request->start_at : $event->startAt;
-        $event->endAt = $request->end_at ? $request->end_at : $event->endAt;
+        $event->startAt = $request->start_date? $request->start_date : $event->startAt;
+        $event->endAt = $request->end_date ? $request->end_date : $event->endAt;
         $event->name = $request->name? $request->name :$event->name;
         $event->slug = $request->slug ? $request->slug :$event->slug;
         $event->updatedAt = $request->updated_at ? $request->updated_at :$event->updatedAt;
         $event->save();
+        
+       
 
         return back()->with("Event updated!");
     }
@@ -116,5 +137,23 @@ class EventController extends Controller
         //
         Event::destroy($id);
         return back()->with("Deleted!");
+    }
+
+    /**
+     * Fetch data using the GuzzleHTTP
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function apiFetch()
+    {
+        // I can't test due to php single thread error. 
+        $url = "http://127.0.0.1:8000/api/v1/events"; //change url
+        $client = new Client();
+        $response = $client->get($url);
+        if($response && $response->getBody()) {
+            dd($response->getBody());
+        }
+
     }
 }

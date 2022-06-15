@@ -12,10 +12,14 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/', [App\Http\Controllers\EventController::class,'index'])->name("home");
+Route::get('/api-fetch', [App\Http\Controllers\EventController::class,'apiFetch'])->name("api-fetch");
 
-Route::get('/', function () {
-    return view('welcome');
+Route::resource("events", "App\Http\Controllers\EventController");
+Route::group(["middleware"=>"auth"], function(){
+    Route::get('/dashboard', function () { return view('dashboard');})->name('dashboard');
+
 });
 
 
-Route::resource("events", "App\Http\Controllers\EventController");
+require __DIR__.'/auth.php';
