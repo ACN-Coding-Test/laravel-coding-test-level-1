@@ -47,4 +47,26 @@ class Handler extends ExceptionHandler
             //
         });
     }
+
+    public function render($request, Throwable $exception)
+    {
+        if ($this->isHttpException($exception) && $request->wantsJson()) {
+            $statusCode = $exception->getStatusCode();
+            switch ($statusCode) {
+                case '404':
+                    return response()->json([
+                        'error' => 'Resource not found'
+                    ], 404);
+                case '500':
+                    return response()->json([
+                        'error' => 'Server Error'
+                    ], 500);
+                case '401':
+                    return response()->json([
+                        'error' => 'Unauthenticated'
+                    ], 401);
+            }
+        }
+        return parent::render($request, $exception);
+    }
 }

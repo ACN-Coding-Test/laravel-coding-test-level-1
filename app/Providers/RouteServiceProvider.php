@@ -11,6 +11,10 @@ use Illuminate\Support\Facades\Route;
 class RouteServiceProvider extends ServiceProvider
 {
     /**
+     * @var string $apiNamespace
+     */
+    protected string $apiNamespace ='App\Http\Controllers\Api';
+    /**
      * The path to the "home" route for your application.
      *
      * Typically, users are redirected here after authentication.
@@ -35,6 +39,15 @@ class RouteServiceProvider extends ServiceProvider
 
             Route::middleware('web')
                 ->group(base_path('routes/web.php'));
+
+            // custom api routes
+            Route::group([
+                'middleware' => ['api_version:v1'],
+                'namespace'  => "{$this->apiNamespace}\V1",
+                'prefix'     => 'api/v1',
+            ], function ($router) {
+                require base_path('routes/api_v1.php');
+            });
         });
     }
 
