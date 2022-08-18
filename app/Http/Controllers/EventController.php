@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Str;
 use App\Models\Event;
 use Illuminate\Http\Request;
-
+use Carbon\Carbon;
 class EventController extends Controller
 {
     /**
@@ -24,7 +24,10 @@ class EventController extends Controller
      */
     public function active(Request $request)
     {
-        //
+        $now = Carbon::now('Asia/Kuala_Lumpur');
+        $events = Event::where('started_at', '>=', $now)->where('end_at', '<=', $now)->get();
+
+        return response($events, 201);
     }
     
     /**
@@ -76,9 +79,22 @@ class EventController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function createOrUpdate($id)
-    {
-        //
+    public function createOrUpdate(Request $request, $id)
+    {   
+        $fields = $request->validate([
+            'name' => 'required',
+            'start_at' => 'required',
+            'end_at' => 'required',
+        ]);
+        $event = Event::find($id);
+        if(!$event){
+            $event = new Event();
+        }
+        $event->name = $fields['name'];
+        $event->slug = Str::slug($fields['name']);
+        $event->start_at = $fields['start_at'];
+        $event->end_at = $fields['end_at'];
+
     }
 
     /**

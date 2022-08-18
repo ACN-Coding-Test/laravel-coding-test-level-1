@@ -19,6 +19,7 @@ class CreateEventsTable extends Migration
             $table->string('slug')->unique();
             $table->timestamp('start_at')->nullable();
             $table->timestamp('end_at')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
