@@ -26,3 +26,5 @@ Route::post('/v1/events',[EventController::class, 'store']);
 Route::put('/v1/events/{id}',[EventController::class, 'createOrUpdate']);
 Route::patch('/v1/events/{id}',[EventController::class, 'update']);
 Route::delete('/v1/events/{id}',[EventController::class, 'destroy']);
+Route::get('/v1/event-search',[EventController::class, 'search']);
+
