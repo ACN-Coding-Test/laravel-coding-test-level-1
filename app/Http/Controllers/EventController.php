@@ -14,7 +14,9 @@ class EventController extends Controller
      */
     public function index()
     {
-        return Event::all();
+        // dd(Event::paginate(10));
+        return Event::paginate(10);
+        
     }
 
     /**
@@ -25,7 +27,7 @@ class EventController extends Controller
     public function active(Request $request)
     {
         $now = Carbon::now('Asia/Kuala_Lumpur');
-        $events = Event::where('started_at', '>=', $now)->where('end_at', '<=', $now)->get();
+        $events = Event::where('started_at', '>=', $now)->where('end_at', '<=', $now)->get()->paginate(10);
 
         return response($events, 201);
     }
@@ -38,7 +40,7 @@ class EventController extends Controller
      */
     public function show($id)
     {
-        return Event::firstOrFail($id);
+        return Event::where('id',$id)->firstOrFail();
     }
     /**
      * Store a newly created resource in storage.
@@ -146,5 +148,20 @@ class EventController extends Controller
         ];
 
         return response($response, 201);
+    }
+    /**
+     * Search resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function search(Request $request)
+    {
+        $events = Event::where('id','LIKE',"%$request->keyword%")
+                    ->orWhere('name','LIKE',"%$request->keyword%")
+                    ->orWhere('slug','LIKE',"%$request->keyword%")
+                    ->paginate(10);
+
+      return response()->json($events);
     }
 }
