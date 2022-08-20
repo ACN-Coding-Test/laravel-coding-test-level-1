@@ -58,7 +58,7 @@
 
 <script>
 export default {
-    name: 'event',
+    name: 'single-event',
     data(){
           return{
             event:{
@@ -71,9 +71,8 @@ export default {
     methods:{
         fetchEvent:async function(id){
             await axios.get(`/api/v1/events/${id}`).then((response)=>
-            {
-                this.event=response.data;
-
+            {   
+                this.event=response.data.data;
             }).catch(err => console.log(err));
 
         },

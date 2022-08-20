@@ -12,12 +12,13 @@
 
                         <div class="text-center">
                             <h5> Confirmation on deleting list {{ singleEvent.name }}?</h5>
+                            <p class="text-danger" v-if="unauthenticated">User Unauthenticated to perform action.</p>
                         </div>
 
                         <div class="row">
                             <div class="col text-center p-3">
-                                <button type="button" class="btn btn-primary" data-dismiss="modal" @click="openDeleteConfirmation=!openDeleteConfirmation"> Cancel </button>
-                                <button type="button" class="btn btn-danger" data-dismiss="modal" @click="DeleteInventory(singleEvent.id)" data-toggle="modal" data-target="#SuccessFail" > Delete </button>
+                                <button type="button" class="btn btn-primary" data-dismiss="modal" @click="()=>{openDeleteConfirmation=!openDeleteConfirmation; unauthenticated=false;}"> Cancel </button>
+                                <button type="button" class="btn btn-danger" data-dismiss="modal" @click="DeleteEvent(singleEvent.id)" data-toggle="modal" data-target="#SuccessFail" > Delete </button>
                             </div>
                         </div>
 
@@ -126,6 +127,7 @@ export default {
             searchLive:null,
             SearchPagination:false,
             openDeleteConfirmation:false,
+            unauthenticated:false,
           };
 
     },
@@ -173,13 +175,18 @@ export default {
             this.singleEvent=Object.assign({}, data );
             this.openDeleteConfirmation = !this.openDeleteConfirmation;
         },
-        DeleteInventory:async function(id){
+        DeleteEvent:async function(id){
             await axios.delete(`/api/v1/events/${id}`).then((response)=>
             {
                 this.getEvents();
                 this.openDeleteConfirmation=!this.openDeleteConfirmation;
 
-            }).catch(err => {console.log(err)});
+            }).catch(err => {console.log(err)
+
+                if(err.response.status == 401){
+                    this.unauthenticated = true;
+                }
+            });
 
         },
     },

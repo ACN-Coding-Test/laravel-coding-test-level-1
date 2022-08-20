@@ -6,21 +6,20 @@ import Events from "../pages/Events/Events.vue";
 import Event from "../pages/Events/Event.vue";
 import CreateEvent from "../pages/Events/Create.vue";
 import EditEvent from "../pages/Events/Edit.vue";
+import Login from "../pages/Auth/Login.vue";
+import Register from "../pages/Auth/Register.vue";
 
 Vue.use(VueRouter);
 
 const router = new VueRouter({
     mode: 'history',
+    linkExactActiveClass: 'active',
     routes:[
-        {
-            path: '/',
-            component: Home,
-            name:'home'
-        },
         {
             path: '/home',
             component: Home,
-            name:'home'
+            name:'home',
+            alias: '/'
         },
         {
             path: '/events',
@@ -33,7 +32,7 @@ const router = new VueRouter({
             name:'single-event'
         },
         {
-            path: '/events/create',
+            path: '/events/create/new',
             component: CreateEvent,
             name:'create-event'
         },
@@ -41,6 +40,16 @@ const router = new VueRouter({
             path: '/events/:id/edit',
             component: EditEvent,
             name:'edit-event'
+        },
+        {
+            path: '/login',
+            component: Login,
+            name:'login'
+        },
+        {
+            path: '/register',
+            component: Register,
+            name:'register'
         },
     ],
 });

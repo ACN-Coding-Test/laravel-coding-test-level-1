@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,9 +23,19 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('/v1/events',[EventController::class, 'index']);
 Route::get('/v1/events/active-events',[EventController::class, 'active']);
 Route::get('/v1/events/{id}',[EventController::class, 'show']);
-Route::post('/v1/events',[EventController::class, 'store']);
-Route::put('/v1/events/{id}',[EventController::class, 'createOrUpdate']);
-Route::patch('/v1/events/{id}',[EventController::class, 'update']);
-Route::delete('/v1/events/{id}',[EventController::class, 'destroy']);
 Route::get('/v1/event-search',[EventController::class, 'search']);
+
+//auth
+Route::post('/register',[AuthController::class, 'register']);
+Route::post('/login',[AuthController::class, 'login']);
+
+Route::group(['middleware'=>['auth:sanctum']], function(){
+    
+    Route::post('/logout',[AuthController::class, 'logout']);
+    Route::post('/v1/events',[EventController::class, 'store']);
+    Route::put('/v1/events/{id}',[EventController::class, 'createOrUpdate']);
+    Route::patch('/v1/events/{id}',[EventController::class, 'update']);
+    Route::delete('/v1/events/{id}',[EventController::class, 'destroy']);
+
+});
 

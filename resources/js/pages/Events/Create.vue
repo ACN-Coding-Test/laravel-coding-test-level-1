@@ -23,15 +23,16 @@
                             </div>
                         </div>
                         <div class="row">
-                            <p class="text-danger" v-if="FormError">Fill in the form completely</p>
                             <button type="button" class="btn btn-primary m-1"  @click="createEvent()" >
                             Create
                             </button>
                             <router-link :to="{ name:'list-events'}">
                             <button type="submit" class="btn btn-danger m-1" >
-                            Cancel
+                                Cancel
                             </button>
                             </router-link>
+                            <p class="text-danger" v-if="FormError">Fill in the form completely</p>
+                            <p class="text-danger" v-if="unauthenticated">User unauthenticated to perform action </p>
                         </div>
                     </div>
                 </div>
@@ -42,32 +43,38 @@
 
 <script>
 export default {
-    name: 'createevent',
+    name: 'create-event',
     data(){
-            return{
-                form:{
-                    type: Object,
-                    name:'',
-                    start_at:new Date(),
-                    end_at:new Date()
-                },
-                FormError:false,
-                
-            };
+        return{
+            form:{
+                type: Object,
+                name:'',
+                start_at:new Date(),
+                end_at:new Date()
+            },
+            FormError:false,
+            unauthenticated:false,       
+        };
 
     },
     methods:{
         createEvent:async function(){
-            if(this.form.name !== '' || this.form.start_at !== '' || this.form.end_at !== ''){
+            if(this.form.name == '' || this.form.start_at == '' || this.form.end_at == ''){
                 this.FormError = true;
                 return;
             }
 
-            await axios.post('/api/v1/events',data,config).then((response)=>
-            {
+            await axios.post('/api/v1/events',this.form).then((response)=>
+            {   
+                this.unauthenticated = false;
                 this.$router.push({name:'list-events'}).catch(()=>{});
 
-            }).catch(err => console.log(err));
+            }).catch(err =>{
+              console.log(err)   
+              if(err.response.status == 401){
+                    this.unauthenticated = true;
+                }
+            });
 
         },
     },

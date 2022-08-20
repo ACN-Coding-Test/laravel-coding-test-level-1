@@ -5,6 +5,9 @@ use Illuminate\Support\Str;
 use App\Models\Event;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use App\Mail\EventCreated;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Redis;
 class EventController extends Controller
 {
     /**
@@ -14,9 +17,7 @@ class EventController extends Controller
      */
     public function index()
     {
-        // dd(Event::paginate(10));
         return Event::paginate(10);
-        
     }
 
     /**
@@ -40,7 +41,26 @@ class EventController extends Controller
      */
     public function show($id)
     {
-        return Event::where('id',$id)->firstOrFail();
+        $cachedEvent = Redis::get('event:'.$id);
+
+        if(isset($cachedEvent)) {
+            $event = json_decode($cachedEvent, FALSE);
+      
+            return response()->json([
+                'status_code' => 201,
+                'message' => 'Fetched from redis',
+                'data' => $event,
+            ]);
+        }else {
+            $event = Event::where('id',$id)->firstOrFail();
+            Redis::set('event:'.$id, $event);
+      
+            return response()->json([
+                'status_code' => 201,
+                'message' => 'Fetched from database',
+                'data' => $event,
+            ]);
+        }
     }
     /**
      * Store a newly created resource in storage.
@@ -65,6 +85,8 @@ class EventController extends Controller
             'start_at' => $fields['start_at'],
             'end_at' => $fields['end_at'],
         ]);
+        $user = auth('sanctum')->user();
+        Mail::to($user->email)->send(new EventCreated($user,$event));
 
         $response = [
             'event' => $event,
