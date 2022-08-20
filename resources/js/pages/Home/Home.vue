@@ -66,7 +66,7 @@ export default {
                 method: 'GET',
                 url: 'https://dad-jokes.p.rapidapi.com/random/joke',
                 headers: {
-                    'X-RapidAPI-Key': '7cbcc28435msh5f0dacc820fee1ap17bf08jsnc43f248837fc',
+                    'X-RapidAPI-Key': 'Get-dad-jokes-api-key',
                     'X-RapidAPI-Host': 'dad-jokes.p.rapidapi.com'
             }
             };
