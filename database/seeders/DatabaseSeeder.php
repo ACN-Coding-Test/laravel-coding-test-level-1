@@ -13,6 +13,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // 
+        $this->call(EventSeeder::class);
+        // \App\Models\Event::factory(10)->create();
     }
 }
