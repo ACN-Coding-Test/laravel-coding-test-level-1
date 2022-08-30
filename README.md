@@ -1,3 +1,23 @@
+###### Zoul Event-Manager Setup ######
+How to setup:
+IMPORTANT NOTICE:
+- Application has mail setup and redis setup
+ Make sure redis are installed in ur wamp or xamp, and make sure you setup ur mailtrap environment as well in .env
+
+To migrate data:
+  - php artisan migrate
+
+To seed fake data to database
+  - php artisan db:seed --class=EventSeeder
+
+The front-end uses Vue Js. To setup front-end
+  - npm install 
+  - npm run dev
+
+After the above has been setup, run the application by:
+  -php artisan serve
+
+
 # Laravel Live Coding Test
 
 ## Follow this steps
