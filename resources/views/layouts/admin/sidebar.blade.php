@@ -13,7 +13,7 @@
     <div class="divider"></div>
     <ul class="nav menu">
         <li class="active"><a href="index.html"><em class="fa fa-dashboard">&nbsp;</em> Dashboard</a></li>
-        <li><a href="widgets.html"><em class="fa fa-calendar">&nbsp;</em> Widgets</a></li>
+        <li><a href="{{url('events')}}"><em class="fa fa-calendar">&nbsp;</em> Events</a></li>
         <li><a class="dropdown-item" href="javascript:;" onclick="$('#logout-form').submit();" data-toggle="modal" data-target="#logoutModal">
                 <em class="fa fa-power-off">&nbsp;</em>
                 Logout

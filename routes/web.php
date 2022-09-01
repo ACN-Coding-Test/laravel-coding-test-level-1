@@ -13,10 +13,6 @@ use App\Http\Controllers\HomeController;
 |
 */
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/sources', [App\Http\Controllers\HomeController::class, 'sources'])->name('sources');
-Route::get('/details/{artical}', [App\Http\Controllers\HomeController::class, 'details'])->name('details');
-Route::post('/submitComment/{artical}',[App\Http\Controllers\HomeController::class, 'comment'])->name('comment');
 Route::get('/', function () {
     return view('welcome');
 });
@@ -25,4 +21,15 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
 
+
+Route::middleware(['auth'])->group(function () {
+    
+    Route::get('/events', [App\Http\Controllers\EventController::class, 'index']);
+    Route::get('/events/create',[App\Http\Controllers\EventController::class, 'create']);
+    Route::post('/events/store', [App\Http\Controllers\EventController::class, 'store']);
+    Route::get('/events/show/{event}', [App\Http\Controllers\EventController::class, 'show']);
+    Route::put('/events/update/{event}', [App\Http\Controllers\EventController::class, 'update']);
+    Route::get('/events/edit/{event}', [App\Http\Controllers\EventController::class, 'edit']);  
+    Route::delete('/events/delete/{event}', [App\Http\Controllers\EventController::class, 'delete']);
+});
 require __DIR__.'/auth.php';

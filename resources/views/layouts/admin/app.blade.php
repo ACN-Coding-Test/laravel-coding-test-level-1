@@ -21,7 +21,7 @@
 <!-- Bootstrap core JavaScript-->   
     <script src="{!! asset('js/jquery-1.11.1.min.js')!!}"></script>
     <script src="{!! asset('js/bootstrap.min.js')!!}"></script>
-    <script src="{!! asset('js/custom.js')!!}"></script>
+    <script src="{!! asset('js/custom.js?v=1')!!}"></script>
     <!-- Page level custom scripts -->
     <script src="{!! asset('plugin/toastr/toastr.min.js') !!}"></script>
 
