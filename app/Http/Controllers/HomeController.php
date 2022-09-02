@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
-
+use Illuminate\Support\Facades\Redis;
 class HomeController extends Controller
 {
     /**
@@ -19,11 +19,20 @@ class HomeController extends Controller
 
     public function index(Request $request)
     {
-        $client = new Client();
-        $res = $client->request('get', env("FREE_API_URL"));
-        $apiList = new \stdClass();
-        if ($res->getStatusCode() == 200) { 
-            $apiList = json_decode($res->getBody()->getContents());
+        $cacheKey = "FreeApiList";
+        $redis = Redis::connection();
+        $apiListCache = $redis->get($cacheKey);
+        if(isset($apiListCache)) {
+            $apiList = json_decode($apiListCache);
+        }else{
+            $client = new Client();
+            $res = $client->request('get', env("FREE_API_URL"));
+            $apiList = new \stdClass();
+            if ($res->getStatusCode() == 200) { 
+                $data = $res->getBody()->getContents();
+                $apiList = json_decode($data);
+                $redis->set($cacheKey, $data);
+            }
         }
         return view('home.index',compact('apiList'));
     }
