@@ -1,106 +1,106 @@
-@extends('layouts.blog.app')
+@extends('layouts.admin.app')
 @section('content')
-    <div class="section">
-        <div class="container">
-            <?php if(!empty($keyword)){?>
-                <div class="row">
-                    <div class="col-md-12">
-                        <h2 class="title">Top <?php echo count($latestArticals); ?> Searc Results for {{$keyword}}</h2>
-                    </div>
-                </div>
-            <?php } ?>
-            <div id="hot-post" class="row hot-post">
-                <?php if(!empty($latestArticals[0])){ ?>
-                    <div class="col-md-8 hot-post-left">
-                        <div class="post post-thumb">
-                            <a class="post-img" href="{{ url('details/'.$latestArticals[0]->id)}}"><img src="{{ $latestArticals[0]->urlToImage}}" alt="image for artical. Click to read Artical"></a>
-                            <div class="post-body">
-                                <div class="post-category">
-                                    <a href="#">{{$latestArticals[0]->source->category}}</a>
-                                </div>
-                                <h3 class="post-title title-lg"><a href="{{ url('details/'.$latestArticals[0]->id)}}">{{$latestArticals[0]->title}}</a></h3>
-                                <ul class="post-meta">
-                                    <li><a href="#">{{$latestArticals[0]->author}}</a></li>
-                                    <li>{{date('D M-Y',strtotime($latestArticals[0]->published_at))}}</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <?php } ?>
-                <div class="col-md-4 hot-post-right">
-                    <?php if(!empty($latestArticals[1])){ ?>
-                    
-                        <div class="post post-thumb">
-                            <a class="post-img" href="{{ url('details/'.$latestArticals[1]->id)}}"><img src="{{ $latestArticals[1]->urlToImage}}" alt="image for artical. Click to read Artical"></a>
-                            <div class="post-body">
-                                <div class="post-category">
-                                    <a href="#">{{$latestArticals[1]->source->category}}</a>
-                                </div>
-                                <h3 class="post-title"><a href="{{ url('details/'.$latestArticals[1]->id)}}">{{$latestArticals[1]->title}}</a></h3>
-                                <ul class="post-meta">
-                                    <li><a href="#">{{$latestArticals[1]->author}}</a></li>
-                                    <li>{{date('D M-Y',strtotime($latestArticals[1]->published_at))}}</li>
-                                </ul>
-                            </div>
-                        </div>
-                    <?php } ?>
-                    <?php if(!empty($latestArticals[2])){ ?>
-                
-                        <div class="post post-thumb" role="next Artical">
-                            <a class="post-img" href="{{ url('details/'.$latestArticals[2]->id)}}"><img src="{{ $latestArticals[2]->urlToImage}}" alt="image for artical. Click to read Artical"></a>
-                            <div class="post-body">
-                                <div class="post-category">
-                                    <a href="#">{{$latestArticals[2]->source->category}}</a>
-                                </div>
-                                <h3 class="post-title"><a href="blog-post.html">{{$latestArticals[2]->title}}</a></h3>
-                                <ul class="post-meta">
-                                    <li><a href="#">{{$latestArticals[2]->author}}</a></li>
-                                    <li>{{date('D M-Y',strtotime($latestArticals[2]->published_at))}}</li>
-                                </ul>
-                            </div>
-                        </div>
-                    <?php } ?>
-                </div>
-            </div>
-        </div>
-    </div>
+<style type="text/css">
+.paging-nav {
+  text-align: right;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  text-align: center;
+}
+
+.paging-nav a {
+  margin: auto 1px;
+  text-decoration: none;
+  display: inline-block;
+  padding: 1px 7px;
+  background: #91b9e6;
+  color: white;
+  border-radius: 3px;
+}
+
+.paging-nav .selected-page {
+  background: #187ed5;
+  font-weight: bold;
+}
+
+.paging-nav,
+#tableData {
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+}
+</style>
+<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
+    <div class="row">
+        <ol class="breadcrumb">
+            <li><a href="#">
+                <em class="fa fa-home"></em>
+            </a></li>
+            <li class="active">Home</li>
+        </ol>
+    </div><!--/.row-->
     
-    <div class="section">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <?php foreach($sources as $source){ ?>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="section-title">
-                                    <h2 class="title">{{$source->name}}</h2>
-                                </div>
-                            </div>
-                            <?php
-                            if(!empty($sourceArticals[$source->id])){
-                                foreach($sourceArticals[$source->id] as $artical){?>
-                                <div class="col-md-4">
-                                    <div class="post">
-                                        <a class="post-img" href="{{url('details/'.$artical->id)}}"><img src="{{$artical->urlToImage}}" alt="Image for Artical"></a>
-                                        <div class="post-body">
-                                            <div class="post-category">
-                                                <a href="#">{{$source->category}}</a>
-                                            </div>
-                                            <h3 class="post-title"><a href="{{url('details/'.$artical->id)}}">{{$artical->title}}</a></h3>
-                                            <ul class="post-meta">
-                                                <li><a href="#">{{$artical->author}}</a></li>
-                                                <li>{{date('D M-Y',strtotime($artical->published_at))}}</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                                <?php }
-                            } ?>
-                            <div class="clearfix visible-md visible-lg"></div>
-                        </div>
-                    <?php } ?>
-                </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Home - Free Apis</h1>
+        </div>
+    </div><!--/.row-->
+    
+    
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+              <div class="pull-left">Free Api List</div>
+              <div class="clearfix"></div>
+            </div>
+            
+            <div class="section">
+              <div class="row">
+                  <div class="col-lg-12">
+                    <div class="table-responsive">
+                      <table class="table table-bordered" id="tableData">
+                        <thead class="thead-dark">
+                            <tr>
+                              <th scope="col">#</th>
+                              <th scope="col">Api</th>
+                              <th scope="col">Description</th>
+                              <th scope="col">Auth</th>
+                              <th scope="col">HTTPS</th>
+                              <th scope="col">Cors</th>
+                              <th scope="col">Link</th>
+                              <th scope="col">Category</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach($apiList->entries as $index=>$api){ ?>
+                            <tr>
+                                <th scope="row"><?php echo $index+1; ?></th>
+                                <td><?php echo $api->API; ?></td>
+                                <td><?php echo $api->Description; ?></td>
+                                <td><?php echo $api->Auth; ?></td>
+                                <td><?php echo $api->HTTPS; ?></td>
+                                <td><?php echo $api->Cors; ?></td>
+                                <td><?php echo $api->Link; ?></td>
+                                <td><?php echo $api->Category; ?></td>
+                            </tr>
+                            <?php } ?>                                
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+              </div>
+            
             </div>
         </div>
-    </div>
+    </div><!--/.row-->
+</div>
+@endsection
+@section('script')
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
+<script src="{!! asset('plugin/pagining/paging.js')!!}" ></script> 
+<script type="text/javascript">
+    $('document').ready(function(){
+        $('#tableData').paging({limit: 100});
+    });
+</script>
 @endsection

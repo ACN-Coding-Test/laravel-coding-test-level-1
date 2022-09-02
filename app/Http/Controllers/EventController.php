@@ -14,7 +14,7 @@ class EventController extends Controller
 
     public function __construct()
     {
-        $this->middleware(array('auth'));
+
     }
     
      public function index(Request $request)

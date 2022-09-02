@@ -3,11 +3,8 @@
 namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Source;
-use App\Models\Artical;
-use App\Models\UserComment;
-use App\Models\User;
-
+use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Redis;
 class HomeController extends Controller
 {
     /**
@@ -17,17 +14,26 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        //$this->middleware('auth');
+        
     }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
     public function index(Request $request)
     {
-        echo 'here';
-        exit;
+        $cacheKey = "FreeApiList";
+        $redis = Redis::connection();
+        $apiListCache = $redis->get($cacheKey);
+        if(isset($apiListCache)) {
+            $apiList = json_decode($apiListCache);
+        }else{
+            $client = new Client();
+            $res = $client->request('get', env("FREE_API_URL"));
+            $apiList = new \stdClass();
+            if ($res->getStatusCode() == 200) { 
+                $data = $res->getBody()->getContents();
+                $apiList = json_decode($data);
+                $redis->set($cacheKey, $data);
+            }
+        }
+        return view('home.index',compact('apiList'));
     }
 }

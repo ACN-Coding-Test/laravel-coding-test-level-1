@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
+use Auth;
+use App\Notifications\EventCreated;
 
 class Event extends Model
 {
@@ -32,5 +34,14 @@ class Event extends Model
                 $event->slug = Str::slug($event->name);
             }
         });
+
+        self::created(function($event){
+            $user = Auth::user();
+            if(empty($user->id)){
+                $user = User::find(1);
+            }
+            $user->notify(new EventCreated($event));
+        });
+
     }
 }
