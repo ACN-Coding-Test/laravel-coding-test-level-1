@@ -3,10 +3,7 @@
 namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Source;
-use App\Models\Artical;
-use App\Models\UserComment;
-use App\Models\User;
+use GuzzleHttp\Client;
 
 class HomeController extends Controller
 {
@@ -17,17 +14,17 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        //$this->middleware('auth');
+        
     }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
     public function index(Request $request)
     {
-        echo 'here';
-        exit;
+        $client = new Client();
+        $res = $client->request('get', env("FREE_API_URL"));
+        $apiList = new \stdClass();
+        if ($res->getStatusCode() == 200) { 
+            $apiList = json_decode($res->getBody()->getContents());
+        }
+        return view('home.index',compact('apiList'));
     }
 }
