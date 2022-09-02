@@ -1,0 +1,5 @@
+These env veriables will be needed to run the Test
+
+FREE_API_URL="https://api.publicapis.org/entries"
+REDIS_USERNAME=
+REDIS_PASSWORD=
