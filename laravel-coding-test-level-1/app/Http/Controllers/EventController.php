@@ -261,6 +261,10 @@ class EventController extends Controller
     {
         $user = User::where('email', $request->email)->get();
 
+        if(count($user) < 1){
+            return redirect('login')->withFail('User not found!');
+        }
+
         if(Crypt::decrypt($user[0]->password) == $request->password){
 
             $request->session()->put('user', $user[0]->name);
@@ -270,6 +274,7 @@ class EventController extends Controller
         }
         
         return redirect('login')->withFail('User not found!');
+        
     }
 
 }
