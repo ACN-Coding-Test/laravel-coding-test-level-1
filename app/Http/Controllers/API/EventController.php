@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\EventResource;
+use App\Jobs\SendEmail;
 use App\Models\Event;
 use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Http\Request;
@@ -62,6 +63,14 @@ class EventController extends Controller
             'end_at' => $request->endAt,
         ]);
 
+        if (!$event) {
+            return response()->json(['Failed to create event']);
+        }
+
+
+        $details = ['email' => 'recipient@example.com'];
+        SendEmail::dispatch($details);
+
         return response()->json(['Event created successfully.', new EventResource($event)]);
     }
 
@@ -117,10 +126,9 @@ class EventController extends Controller
             ]);
         }
 
-        // $event->name = $request->name;
-        // $event->start_at = $request->startAt;
-        // $event->end_at = $request->endAt;
-        $event->update($request->all());
+        if (!$event->update($request->all())) {
+            return response()->json(['Failed to update Event']);
+        }
 
         return response()->json(['Event updated successfully.', new EventResource($event)]);
     }
