@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SendEmail;
 use App\Models\Event;
 use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Http\Request;
@@ -59,6 +60,9 @@ class EventController extends Controller
         $event->slug = SlugService::createSlug(Event::class, 'slug', $request->name);
         $event->end_at = $request->endAt;
         $event->save();
+
+        $details = ['email' => 'recipient@example.com'];
+        SendEmail::dispatch($details);
 
         return redirect(route('event.index'))->with('status', 'Event Successfully Added');
     }
@@ -125,6 +129,5 @@ class EventController extends Controller
         //
         $event->delete();
         return redirect(route('event.index'))->with('status', 'Event Successfully Deleted');
-
     }
 }
