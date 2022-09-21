@@ -1,62 +1,50 @@
-# Laravel Live Coding Test
+## Backend Dependency
+* php ^7.3|^8.0
+* composer 
+ 
+## Initial Installation
+**Step 1:** Clone the repository
+```
+https://github.com/mashiurfpi/laravel-coding-test-level-1.git
+```
 
-## Follow this steps
+**Step 2:**  Copy .env.example file to .env and edit database credentials there, or Create `.env` file 
 
-#### Application Setup (DO THIS FIRST)
+**Step 3:**  Generate key
 
-- **Fork this repository** into your **GitHub** account (You can create a **GitHub** account if you don't have one)
-- Clone the repository from **your repository**
+```
+php artisan key:generate
+```
 
-#### First Test - CRUD REST API
+**Step 4:** Install dependencies inside the repository
 
-- Make sure that you are in `main` branch
-- Create a new branch and name it `1-crud-api`
-- Create a model with name `Event`
-- `Event` will have these properties
-  - **id** -> PK, UNIQUE, value must be a UUID
-  - **name** -> String
-  - **slug** -> UNIQUE, String
-  - **createdAt** -> NOT NULL, DateTime
-  - **updatedAt** -> NOT NULL, DateTime
-- Create these APIs
-  - GET /api/v1/events -> Return all events from the database
-  - GET /api/v1/events/active-events -> Return all events that are active = current datetime is within startAt and endAt
-  - GET /api/v1/events/{id} -> Get one event
-  - POST /api/v1/events -> Create an event
-  - PUT /api/v1/events/{id} -> Create event if not exist, else update the event in idempotent way
-  - PATCH /api/v1/events/{id} -> Partially update event
-  - DELETE /api/v1/events/{id} -> Soft delete an event
-- Seed the database with dummy events (min. 5 events)
-- Merge `1-crud-api` with `main`, use PR
+```
+composer install or update
+```
 
-#### Second Test - UI
+**Step 5:** Run migration for creating table.
 
-- Make sure that you are in `main` branch
-- Create a new branch and name it `2-ui`
-- Create these views
-  - /events -> Show all events in the table (search and pagination has bonus point). Last column should display 2 buttons on each row to update and delete the event
-  - /events/{id} -> Show individual event
-  - /events/create -> Create an event
-  - /events/{id}/edit -> Edit an event
-- Merge `2-ui` with `main`, use PR
+```
+php artisan migrate
+```
 
-#### Third Test - Advance Topic
+**Step 6:** Run Seed.
 
-- Make sure that you are in `main` branch
-- Create a new branch and name it `3-advance-topic`
-- Implement these features
-  - Server side data caching with redis
-  - Send an email everytime an event is created (you can use mailtrap or other smtp provider that's easy to setup)
-  - Authentication -> only authenticated users can create, update and delete events
-  - Calling of an external API(s) and display the data in the UI
+```
+php artisan db:seed --class=EventsTableSeeder
+```
 
-## Bonus points
+**Step 7:** Run the application
+### Start Laravel app
+```
+php artisan serve
+```
 
-- If you follow a clean code principle
-- If you follow a good git practice
-- If you deploy the application on the internet
+### Access the application at http://127.0.0.1:8000/
+#### Open [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
 
-## Finally
+### Link to Github repo.
 
-- Push all the codes into the your remote repository
-- Make sure the repository is public
+### [Github repository](https://github.com/mashiurfpi/laravel-coding-test-level-1.git)
+
+
