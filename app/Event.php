@@ -8,10 +8,18 @@ use App\Models\Traits\HasUuid;
 
 class Event extends Model
 {
-    protected $fillable = [
-        'name',
-        'slug'
-    ];
+
+    protected $table = 'events';
+
+    protected $fillable = ['name','slug'];
+
+    protected $primaryKey = 'id';
+
+    protected $keyType = 'string';
+
+    public $incrementing = false;
+
+    public $timestamps = false;
 
     use SoftDeletes;
     use HasUuid;

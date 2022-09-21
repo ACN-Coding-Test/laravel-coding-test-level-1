@@ -14,7 +14,6 @@ use Validator;
 
 class EventController extends BaseController
 {
-
       // Call internal API
       public function index()
       {
@@ -23,11 +22,9 @@ class EventController extends BaseController
   
           $responseBody = json_decode($response->getContent(), true);
   
-          $events = $responseBody["data"]["data"];
-          
+          $events = $responseBody["data"]["data"];          
   
-          $pagination = $responseBody["data"];
-          
+          $pagination = $responseBody["data"];          
   
           return view('events.index', compact('events','pagination'));
       }
@@ -41,8 +38,6 @@ class EventController extends BaseController
     public function showAllEvent()
     {
         $events = Event::get();
-
-
         return $this->sendResponse($events->toArray(), 'Events retrieved.');
     }
 
@@ -54,7 +49,7 @@ class EventController extends BaseController
      */
     public function showActiveEvent()
     {
-        $dateNow = \Carbon\Carbon::now();
+        $dateNow = \Carbon\Carbon::now(); 
         $activeEvent = Event::whereDate('created_at', '<', $dateNow)->get();
         return $this->sendResponse($activeEvent->toArray(), 'Events retrieved');
     }
@@ -86,21 +81,15 @@ class EventController extends BaseController
     {
         $input = $request->all();
 
-
         $validator = Validator::make($input, [
             'name' => 'required|string',
             'slug' => 'required|string|unique:events'
         ]);
 
-
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());       
         }
-
-
         $event = Event::create($input);
-
-
         return $this->sendResponse($event->toArray(), 'Event created');
     }
 
@@ -115,13 +104,10 @@ class EventController extends BaseController
     {
         $input = $request->all();
 
-
         $validator = Validator::make($input, [
             'name' => 'required|string',
             'slug' => 'required|string|unique:events'
         ]);
-
-
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());       
         }
@@ -134,7 +120,6 @@ class EventController extends BaseController
             'name' => $request->name,
             'slug' => $request->slug,
         ]);
-
 
         return $this->sendResponse($event->toArray(), 'Event updated');
     }
@@ -156,7 +141,6 @@ class EventController extends BaseController
 
         $input = $request->all();
 
-
         $validator = Validator::make($input, [
             'name' => 'required|string',
             'slug' => 'required|string|unique:events'
@@ -166,8 +150,6 @@ class EventController extends BaseController
         if($validator->fails()){
             return $this->sendError('Validation Error.', $validator->errors());       
         }
-
-
         $event->name = $input['name'];
         $event->slug = $input['slug'];
         $event->save();
@@ -187,8 +169,6 @@ class EventController extends BaseController
         $event = Event::findOrFail($id);
 
         $event->delete();
-
-
         return $this->sendResponse($event->toArray(), 'Event deleted');
     }
 
