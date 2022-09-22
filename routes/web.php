@@ -14,8 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
-
+    return view('auth.login');
 });
 
 
@@ -23,4 +22,12 @@ Route::resource('events','App\Http\Controllers\EventController');
 
 Route::get('/search/', 'App\Http\Controllers\EventController@search')->name('search');
 
+Auth::routes();
+
 Route::get('/home', 'App\Http\Controllers\HomeController@index')->name('home');
+
+Route::get('/fetch','App\Http\Controllers\EventController@fetchExternalAPI')->name('fetch');
+
+// Auth::routes();
+
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

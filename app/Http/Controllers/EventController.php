@@ -12,7 +12,7 @@ class EventController extends Controller
 {
     public function __construct()
     {
-
+        $this->middleware('auth')->except(['index','show','search','fetchExternalAPI']);
     }
 
     /**
@@ -54,7 +54,13 @@ class EventController extends Controller
             'name' => $request->name,
             'slug' => $request->slug
         );
+        
         Event::create($data);
+
+        // Send Email
+        $email = 'mashiurfpi@gmail.com';
+        Mail::to($email)->send(new EventMail($data));
+
         return redirect()->route('events.index')->with('success','Event Created Successfully');
     }
 
@@ -129,6 +135,18 @@ class EventController extends Controller
                 ->orWhere('slug', 'LIKE', "%{$search}%")
                 ->get();
         return view('events.search', compact('events'))->with('i', (request()->input('page', 1) - 1) * 10);
+    }
+
+    public function fetchExternalAPI()
+    {
+        // Using guzzle to call external API
+        $client = new \GuzzleHttp\Client(['verify' => false]);
+
+        $request = $client->get('https://api.publicapis.org/entries');
+        $response = $request->getBody()->getContents();        
+        $responseBody = json_decode($response, true);
+        $randoms = $responseBody["entries"];
+        return view('events.external', compact('randoms'));
     }
 
 }

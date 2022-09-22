@@ -31,7 +31,7 @@
 
   <br>
 
-  <a class="btn btn-dark" href="{{ route('events.index') }}">Back</a>
+  <a class="btn btn-success" href="{{ route('events.index') }}">Back</a>
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>
 

@@ -1,10 +1,15 @@
-<!-- @extends('events.layouts.events') -->
+@extends('events.layouts.events')
 
 @section('main-content')
 
 <h1>List of Events</h1>
-
 <hr>
+
+@if (session('success'))
+    <div class="alert alert-success border-left-success alert-dismissible fade show" role="alert">
+        {{ session('success') }}
+    </div>
+@endif
 
 <form action="{{ route('search') }}" method="GET">
     @csrf
@@ -12,6 +17,7 @@
 </form>
 
 <div style="float: right; margin-bottom: 10px;">
+    <a class="btn btn-success" href="{{ route('fetch') }}">Call External API</a>
     <a class="btn btn-success" href="{{ route('events.create') }}">Add New Event</a>
 </div>
 
@@ -36,13 +42,11 @@
         <td>{{ $event->updated_at }}</td>
         <td>
             <form action="{{ route('events.destroy', $event->id) }}" method="POST">
-
-                <a class="btn btn-info" href="{{ route('events.edit', $event->id) }}">Edit</a>
+                <a class="btn btn-info" href="{{ route('events.edit', $event->id) }}"> Edit </a>
 
                 @csrf
                 @method('DELETE')
-
-                <button class="btn btn-danger">Delete</button>
+                <button class="btn btn-danger"> Delete </button>
             </form>
         </td>
     </tr>
