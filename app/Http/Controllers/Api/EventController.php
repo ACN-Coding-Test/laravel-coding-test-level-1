@@ -5,10 +5,14 @@ namespace App\Http\Controllers\Api;
 use App\Http\Requests\CreateEventRequest;
 use App\Http\Requests\UpdateEventRequest;
 use App\Http\Resources\EventCollection;
+use App\Mail\NewEventMail;
 use App\Models\Event;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Redis;
 
 class EventController extends BaseApiController
 {
@@ -42,6 +46,10 @@ class EventController extends BaseApiController
 
         $event = Event::create($validated_data);
 
+        Redis::set('event_'.$event->id, $event);
+
+        Mail::to(auth('sanctum')->user()->email)->send(new NewEventMail(auth('sanctum')->user(), $event));
+
         return $this->sendResponse($event, 201);
     }
 
@@ -53,6 +61,12 @@ class EventController extends BaseApiController
      */
     public function show($id)
     {
+        $cachedEvent = Redis::get('event_'.$id);
+
+        if (!isset($cachedEvent)) {
+            return $this->sendError('Event not found.', 200);
+        }
+
         $event = Event::find($id);
 
         if (is_null($event)) {
@@ -107,15 +121,21 @@ class EventController extends BaseApiController
      */
     public function patch(UpdateEventRequest $request, $id)
     {
-        $event = Event::find($id);
+        $cachedEvent = Redis::get('event_'.$id);
 
-        if (is_null($event)) {
+        if (!isset($cachedEvent)) {
             return $this->sendError('Event not found.', 200);
         }
+
+        $event = Event::find($id);
 
         $validated_data = $request->validated();
 
         $event->update($validated_data);
+
+        Redis::del('event_'.$id);
+
+        Redis::set('event_'.$id, $event);
 
         return $this->sendResponse($event, 201);
     }
@@ -128,13 +148,17 @@ class EventController extends BaseApiController
      */
     public function destroy($id)
     {
-        $event = Event::find($id);
+        $cachedEvent = Redis::get('event:'.$id);
 
-        if (is_null($event)) {
+        if (!isset($cachedEvent)) {
             return $this->sendError('Event not found.', 200);
         }
 
+        $event = Event::find($id);
+
         $event->delete();
+
+        Redis::del('event:'.$id);
 
         return $this->sendResponse([], 200);
     }

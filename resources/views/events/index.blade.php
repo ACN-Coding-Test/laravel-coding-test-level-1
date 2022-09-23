@@ -98,11 +98,6 @@
             $(document).on('click', '.delete_button', function () {
                 const event_id = $(this).val();
                 if (confirm('Do want to delete this event?')) {
-                    $.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        }
-                    });
 
                     $.ajax({
                         type: "DELETE",
