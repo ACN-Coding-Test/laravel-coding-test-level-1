@@ -19,7 +19,13 @@ class EventController extends BaseApiController
      */
     public function index(Request $request)
     {
-        $events = Event::paginate($request->paginate ?? 20);
+        if ($request->has('search')){
+            $events = Event::where('name', 'like', $request->input('search'))
+                ->orWhere('slug', 'like', $request->input('search'))
+                ->paginate($request->paginate ?? 10);
+        }else{
+            $events = Event::paginate($request->paginate ?? 10);
+        }
 
         return $this->sendResponse($events, 200);
     }
