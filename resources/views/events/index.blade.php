@@ -44,11 +44,15 @@
             function fetchEvents(given_url = '', search = '') {
                 let url = given_url ? given_url: '/api/v1/events';
                 let data = {};
-                if(search){
-                      data = {
-                        search: search
+
+                let val = $.trim($('#search').val());
+                if (val) {
+                    val = val.toLowerCase();
+                    data = {
+                        search: val
                     }
                 }
+
                 $.ajax({
                     type: "GET",
                     url: url,
@@ -121,12 +125,7 @@
 
             $(document).on('keyup', '#search', function() {
                 $("tbody").html("");
-                let val = $.trim(this.value);
-
-                if (val) {
-                    val = val.toLowerCase();
-                    fetchEvents('', val);
-                }
+                fetchEvents();
             });
 
         });
