@@ -37,11 +37,13 @@
                     </ul>
 
                     <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ms-auto">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="/events">Events</a>
-                                </li>
+                    <ul class="navbar-nav ml-auto" id="rightnav">
+
+                        <!-- Authentication Links -->
+
+
                     </ul>
+
                 </div>
             </div>
         </nav>
@@ -56,6 +58,73 @@
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+        const token = localStorage.getItem('api_token');
+
+        let navigation = [];
+
+        if(token === undefined || token === null){
+             navigation = [
+                {name: 'login', id: 'login', to: {name: 'login'}},
+                {name: 'register', id: 'register', to: {name: 'register'}},
+            ];
+
+            // window.location.href = '/login';
+
+        }else{
+            navigation = [
+                {name: 'events', id: 'events', to: {name: 'events'}},
+                {name: 'create events', id: 'login',to: {name: 'events/create'}},
+                {name: 'Sign out', id: 'logout', to: {name: 'logout'}},
+            ]
+        }
+
+
+        $.each(navigation, function (key, item) {
+            $('#rightnav').append('<li class="nav-item">\
+                <a class="nav-link" id="'+item.id+'" href="'+item.to.name+'">'+item.name+'</a>\
+        </li>');
+
+        });
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                'Authorization': "Bearer "+token
+            }
+        });
+
+        $(document).on('click', '#logout', function (e) {
+            e.preventDefault();
+
+            // $(this).text('Sending..');
+
+            $.ajax({
+                type: "POST",
+                url: "/api/v1/auth/logout",
+                dataType: "json",
+                success: function (response) {
+                    $('#errors').html("").removeClass('alert alert-danger');
+                    $('#success_message').addClass('alert alert-success').text('successfully updated');
+                    $('#register').text('Save');
+
+                    localStorage.removeItem('api_token');
+
+                    window.location.href = '/login';
+                },
+                error: function (error) {
+                    $('#errors').html("").addClass('alert alert-danger');
+                    $.each(error.responseJSON.errors, function (key, err_value) {
+                        $('#errors').append('<li>' + err_value[0] + '</li>');
+                    });
+                    $('#register').text('Save');
+                }
+            });
+
+        });
+
+    </script>
 
     @yield('scripts')
 </body>

@@ -22,7 +22,6 @@
                                 <input type="text" name="slug" id="slug" class="form-control" required>
                             </div>
 
-
                             <br>
                             <div class="row">
                                 <div class="col-md-1">
@@ -66,8 +65,10 @@
                     dataType: "json",
                     success: function () {
                         $('#errors').html("").removeClass('alert alert-danger');
-                        $('#success_message').addClass('alert alert-success').text('successfully updated');
+                        $('#success_message').addClass('alert alert-success').text('successfully created!');
                         $('.add_event').text('Save');
+
+                        window.location.href = '/events';
                     },
                     error: function (error) {
                         $('#errors').html("").addClass('alert alert-danger');
@@ -77,9 +78,7 @@
                         $('.add_event').text('Save');
                     }
                 });
-
             });
-
         });
 
 
