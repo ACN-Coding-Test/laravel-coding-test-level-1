@@ -25,4 +25,3 @@ Route::prefix('events')->group(function ($router) {
 });
 
 Auth::routes();
-
