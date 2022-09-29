@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Event;
 use App\Http\Requests\StoreEventRequest;
 use App\Http\Requests\UpdateEventRequest;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Validator;
+use Inertia\Inertia;
 
 class EventController extends Controller
 {
@@ -15,7 +18,24 @@ class EventController extends Controller
      */
     public function index()
     {
-        //
+
+        $events = Event::query()
+            ->when(Request::input('search'), function ($query, $search) {
+                $query->where('name', 'like', '%' . $search . '%')
+                    ->OrWhere('slug', 'like', '%' . $search . '%');
+            })->paginate(10);
+        // dd($events);
+        return Inertia::render('Event/Event', ['events' => $events, 'filters' => Request::only(['search'])]);
+        // return Inertia::render('Users/Index',
+        // [
+        //     'users' => Event::query()
+        //         ->when(Request::input('search'),function($query, $search) {
+        //             $query->where('name','like','%'.$search.'%')
+        //             ->OrWhere('email','like','%'.$search.'%');
+        //         })->paginate(6)
+        //         ->withQueryString(),
+        //         'filters' => Request::only(['search'])
+        // ]);
     }
 
     /**
@@ -25,7 +45,7 @@ class EventController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('Event/Create');
     }
 
     /**
@@ -36,51 +56,65 @@ class EventController extends Controller
      */
     public function store(StoreEventRequest $request)
     {
-        //
-    }
+        Validator::make($request->all(), [
+            'name' => ['required'],
+            'slug' => ['required'],
+        ])->validate();
 
+        Event::create($request->all());
+
+        return redirect()->route('events.index');
+    }
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Event  $event
-     * @return \Illuminate\Http\Response
+     * @param $id
+     * @return JsonResponse
      */
-    public function show(Event $event)
+    public function show($id)
     {
-        //
+        $event = Event::find($id);
+        // dd($event);
+        return Inertia::render('Event/Show', [
+            'event' => $event
+        ]);
     }
-
     /**
-     * Show the form for editing the specified resource.
+     * Write code on Method
      *
-     * @param  \App\Models\Event  $event
-     * @return \Illuminate\Http\Response
+     * @return response()
      */
     public function edit(Event $event)
     {
-        //
+        return Inertia::render('Event/Edit', [
+            'event' => $event
+        ]);
     }
 
     /**
-     * Update the specified resource in storage.
+     * Show the form for creating a new resource.
      *
-     * @param  \App\Http\Requests\UpdateEventRequest  $request
-     * @param  \App\Models\Event  $event
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
-    public function update(UpdateEventRequest $request, Event $event)
+    public function update($id, UpdateEventRequest $request)
     {
-        //
+        Validator::make($request->all(), [
+            'name' => ['required'],
+            'slug' => ['required'],
+        ])->validate();
+
+        Event::find($id)->update($request->all());
+        return redirect()->route('events.index');
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Show the form for creating a new resource.
      *
-     * @param  \App\Models\Event  $event
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
-    public function destroy(Event $event)
+    public function destroy($id)
     {
-        //
+        Event::find($id)->delete();
+        return redirect()->route('events.index');
     }
 }

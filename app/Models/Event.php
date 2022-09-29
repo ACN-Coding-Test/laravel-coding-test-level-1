@@ -9,6 +9,11 @@ use Ramsey\Uuid\Uuid;
 class Event extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'name',
+        'slug',
+    ];
+
     public $incrementing = false;
 
     protected static function boot()
