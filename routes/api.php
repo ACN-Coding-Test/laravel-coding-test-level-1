@@ -26,11 +26,11 @@ Route::prefix('/v1')->name('eventAPI')->group(function(){
     // GET /api/v1/events/{id} -> Get one event
     Route::get('/events/{id}',[Eventapi::class,'show'])->name('show');
     // POST /api/v1/events -> Create an event
-    Route::post('/events',[Eventapi::class,'store'])->name('store');
+    Route::post('/events',[Eventapi::class,'store'])->name('store')->middleware('auth:sanctum');
     // PUT /api/v1/events/{id} -> Create event if not exist, else update the event in idempotent way
-    Route::put('/events/{id}',[Eventapi::class,'updateOrCreate'])->name('updateOrCreate');
+    Route::put('/events/{id}',[Eventapi::class,'updateOrCreate'])->name('updateOrCreate')->middleware('auth:sanctum');
     // PATCH /api/v1/events/{id} -> Partially update event
-    Route::patch('/events/{id}',[Eventapi::class,'updateEventPartially'])->name('updateEventPartially');
+    Route::patch('/events/{id}',[Eventapi::class,'updateEventPartially'])->name('updateEventPartially')->middleware('auth:sanctum');
     // DELETE /api/v1/events/{id} -> Soft delete an event
-    Route::delete('/events/{id}',[Eventapi::class,'destroy'])->name('destroy');
+    Route::delete('/events/{id}',[Eventapi::class,'destroy'])->name('destroy')->middleware('auth:sanctum');
 });
