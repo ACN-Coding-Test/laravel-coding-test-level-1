@@ -3,15 +3,43 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use App\Services\EventService;
 
 class EventController extends Controller
 {
     use ControllerTrait;
 
-    public function index()
+    public function events()
     {
-        return;
+        $es = new EventService();
+        $events = $es->getEvents();
+
+        $data = [];
+        $data['events'] = $events;
+
+        return view('event.index', $data);
+    }
+
+    public function newEvent(Request $request)
+    {
+        $es = new EventService();
+        $es->createEvent($request);
+        return Redirect::back()->withSuccessMessage("Event successfully created");
+    }
+
+    public function updateEvent(Request $request)
+    {
+        $es = new EventService();
+        $es->updateEventPartially($request);
+        return Redirect::back()->withSuccessMessage("Event successfully updated");
+    }
+
+    public function destroyEvent($id)
+    {
+        $es = new EventService();
+        $es->deleteEvent($id);
+        return Redirect::back()->withSuccessMessage("Event successfully deleted");
     }
 
     public function getEvents()

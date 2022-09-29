@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\EventController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,3 +16,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/events', [EventController::class,'events'])->name('events');
+Route::post('/events/create',[EventController::class,'newEvent'])->name('newEvent');
+Route::post('/events/{id}/edit',[EventController::class,'updateEvent'])->name('updateEvent');
+Route::delete('/events/{id}',[EventController::class,'destroyEvent'])->name('destroyEvent');
