@@ -5,9 +5,6 @@ namespace App\Http\Controllers;
 trait ControllerTrait
 {
     protected function sendResponseApi($message, $code = 1, $data = null){
-        $headers = [];
-        $options = JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES;
-
 	    $s = response()->json(
             [
                 'status' => true,
@@ -15,9 +12,7 @@ trait ControllerTrait
                 'data' => $data,
                 'error' => null,
             ],
-            $this->getHttpStatusCode($code),
-            $headers,
-            $options
+            $this->getHttpStatusCode($code)
         );
     	return $s;
     }
@@ -46,26 +41,6 @@ trait ControllerTrait
         if($codeNum >= 2 && $codeNum < 30){
             
             $httpStatusCode = 400;
-
-        }
-        // Application domain validation
-        elseif($codeNum >=  201 && $codeNum < 500){
-
-            //$httpStatusCode = 500;  //Unauthorized
-            $httpStatusCode = 400;  //Unauthorized
-
-        }
-        // Application domain processing errors
-        elseif($codeNum >=  501 && $codeNum < 899){
-
-            //$httpStatusCode = 500;  //
-            $httpStatusCode = 400;  //
-
-        }
-        // API traffic issues (throttling)
-        elseif($codeNum >=  901 && $codeNum < 1000){
-
-            $httpStatusCode = 429;  //
 
         }
         // catch all
