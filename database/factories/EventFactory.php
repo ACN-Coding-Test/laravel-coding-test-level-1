@@ -17,8 +17,10 @@ class EventFactory extends Factory
     public function definition()
     {
         return [
+            // 'id' => fake()->uuid(),
+
             'name' => fake()->name(),
-            'slug' => fake()->unique(),
+            'slug' => fake()->unique()->sentence(),
 
         ];
     }
