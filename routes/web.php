@@ -1,7 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\EventController;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\{EventController, HomeController, MailController};
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -12,12 +13,22 @@ use App\Http\Controllers\EventController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Auth::routes();
 
 Route::get('/', function () {
     return view('welcome');
 });
-
+Route::get('/home', [HomeController::class,'index'])->name('home');
 Route::get('/events', [EventController::class,'events'])->name('events');
-Route::post('/events/create',[EventController::class,'newEvent'])->name('newEvent');
-Route::post('/events/{id}/edit',[EventController::class,'updateEvent'])->name('updateEvent');
-Route::delete('/events/{id}',[EventController::class,'destroyEvent'])->name('destroyEvent');
+
+Route::get('/blogs/{id}', [EventController::class,'index'])->name('index');
+Route::post('/blogs/update/{id}',[EventController::class,'update'])->name('update');
+Route::delete('/blogs/delete/{id}', [EventController::class,'delete'])->name('delete');
+
+Route::middleware(['auth:sanctum', 'verified'])->group(function () {    
+    Route::post('/events/create',[EventController::class,'newEvent'])->name('newEvent');
+    Route::post('/events/{id}/edit',[EventController::class,'updateEvent'])->name('updateEvent');
+    Route::delete('/events/{id}',[EventController::class,'destroyEvent'])->name('destroyEvent');
+
+    Route::get('/send-mail', [MailController::class,'sendEvents'])->name('sendEvents');
+});

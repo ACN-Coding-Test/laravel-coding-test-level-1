@@ -4,11 +4,18 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Redis;
 use App\Services\EventService;
 
 class EventController extends Controller
 {
     use ControllerTrait;
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+        Redis::connection();
+    }
 
     public function events()
     {
@@ -45,8 +52,8 @@ class EventController extends Controller
     public function getEvents()
     {
         $es = new EventService();
-        $event = $es->getEvents();
-        return $this->sendResponseApi('Events successfully retrieved', 1, $event);
+        $events = $es->getEvents();
+        return $this->sendResponseApi('Events successfully retrieved', 1, $events);
     }
 
     public function getEventsByStatus()
