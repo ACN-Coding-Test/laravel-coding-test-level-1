@@ -17,8 +17,9 @@ class CreateEventsTable extends Migration
             $table->uuid('id')->default(DB::raw('(UUID())'));
             $table->string('name', 100);
             $table->string('slug')->unique();
-            $table->timestamp('createdAt')->nullable(false)->useCurrent();
-            $table->timestamp('updatedAt')->nullable(false)->useCurrent();
+            $table->string('status', '10')->default('active');
+            $table->integer('is_deleted')->default(0);
+            $table->timestamps();
         });
     }
 

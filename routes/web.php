@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Models\Event;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,4 +16,15 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+
+Route::group(['prefix' => 'events'], function()
+{
+    Route::get('/','EventsController@getEvents')->name('event.index');
+    Route::post ('/create', 'EventsController@store')->name('event.store');
+    Route::put ('/{id}/edit', 'EventsController@update')->name('event.update');
+    Route::get ('/{id}', 'EventsController@show')->name('event.show');
+    Route::delete ('/{id}/delete', 'EventsController@delete')->name('event.delete');
+
 });
