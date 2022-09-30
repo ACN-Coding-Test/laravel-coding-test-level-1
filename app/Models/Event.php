@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
 use Cviebrock\EloquentSluggable\Sluggable;
+use DB;
 
 class Event extends Model
 {
@@ -43,8 +43,36 @@ class Event extends Model
         ];
     }
 
+    public function getStartDateAttribute() {
+        $date = explode(' ', $this->startAt);
+        return $date[0];
+    }
+
+    public function getStartTimeAttribute() {
+        $date = explode(' ', $this->startAt);
+        return $date[1];
+    }
+
+    public function getEndDateAttribute() {
+        $date = explode(' ', $this->endAt);
+        return $date[0];
+    }
+
+    public function getEndTimeAttribute() {
+        $date = explode(' ', $this->endAt);
+        return $date[1];
+    }
+
+
 
     public function scopeFilter($query, $params = []) {
+        if(isset($params['search']) && $params['search'] != '') {
+            $query->where(function($q) use($params) {
+                $q->where('id', 'like', '%'.$params['search'].'%')
+                    ->orWhere('name', 'like', '%'.$params['search'].'%');
+            });
+        }
+
         if(isset($params['order_by']) && $params['order_by'] != '') {
             $dir = isset($params['order_dir']) && $params['order_dir'] != '' ? $params['order_dir'] : 'asc';
             $query->orderBy($params['order_by'], $dir);

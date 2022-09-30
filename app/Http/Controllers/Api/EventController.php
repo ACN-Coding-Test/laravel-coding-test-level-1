@@ -14,9 +14,9 @@ class EventController extends BaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $events = Event::filter()->get();
+        $events = Event::filter($request)->get();
 
         return $this->successResponse($events);
     }
