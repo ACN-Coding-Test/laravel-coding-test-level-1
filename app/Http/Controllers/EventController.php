@@ -6,14 +6,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Redis;
 use App\Services\EventService;
-
 class EventController extends Controller
 {
     use ControllerTrait;
 
     public function __construct()
     {
-        $this->middleware('auth');
         Redis::connection();
     }
 
@@ -22,8 +20,22 @@ class EventController extends Controller
         $es = new EventService();
         $events = $es->getEvents();
 
+        $getWeather = $es->getWeatherByStateAndCountry();
+        $weather = json_decode($getWeather);
+
+        $weatherDetails                     = [];
+        $weatherDetails['resolvedAddress']  = $weather->resolvedAddress;
+        $weatherDetails['timezone']         = $weather->timezone;
+        $weatherDetails['description']      = $weather->description;
+        $weatherDetails['currentConditions']= $weather->currentConditions->conditions;
+        $weatherDetails['temperature']      = round((($weather->currentConditions->temp - 32) * 5) / 9, 2);
+        $weatherDetails['sunrise']          = date($weather->currentConditions->sunrise);
+        $weatherDetails['sunset']           = date($weather->currentConditions->sunset);
+        $weatherDetails['days']             = $weather->days;
+
         $data = [];
         $data['events'] = $events;
+        $data['weather'] = $weatherDetails;
 
         return view('event.index', $data);
     }

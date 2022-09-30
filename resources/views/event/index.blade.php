@@ -2,6 +2,39 @@
 
 @section('content')
 <div class="container">
+    <div class="card text-left">
+        <div class="card-header">
+            <ul class="nav nav-tabs card-header-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="true" href="#">Weather</a>
+                </li>
+            </ul>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                    <h3 class="card-title">Today Forecasting</h3><hr>
+                    <div class="col-2">
+                        <p class="card-text"><strong>Location</strong></p>
+                        <p class="card-text"><strong>Timezone</strong></p>
+                        <p class="card-text"><strong>Temperature</strong></p>
+                        <p class="card-text"><strong>Description</strong></p>
+                        <p class="card-text"><strong>Condition</strong></p>
+                        <p class="card-text"><strong>Sunrise</strong></p>
+                        <p class="card-text"><strong>Sunset</strong></p>
+                    </div>
+                    <div class="col">
+                        <p class="card-text"> : {{$weather['resolvedAddress']}}</p>
+                        <p class="card-text"> : {{$weather['timezone']}}</p>
+                        <p class="card-text"> : {{$weather['temperature']}} <span>&#8451;</span></p>
+                        <p class="card-text"> : {{$weather['description']}}</p>
+                        <p class="card-text"> : {{$weather['currentConditions']}}</p>
+                        <p class="card-text"> : {{$weather['sunrise']}}</p>
+                        <p class="card-text"> : {{$weather['sunset']}}</p>
+                    </div>
+            </div>
+        </div>
+    </div>
+    <br>
     <div class="card">
         <div class="card-body">
         <div class="row justify-content-md-center">

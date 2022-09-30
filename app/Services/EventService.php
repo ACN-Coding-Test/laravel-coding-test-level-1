@@ -8,6 +8,19 @@ use Carbon\Carbon;
 
 class EventService
 {
+    public function getWeatherByStateAndCountry()
+    {
+        $apiKey     = "LZ4W466CYHEW3KQVY7PZKH56E";
+        $state      = "Dengkil";
+        $country    = "MY";
+
+        $client = new \GuzzleHttp\Client();
+        $request = $client->get('https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/' . $state . ',' . $country .'?key='. $apiKey .'');
+        $response = $request->getBody()->getContents();
+
+        return $response;
+    }
+
 	public function getEvents()
 	{
         $cachedEvents = Redis::get('events_');
@@ -115,7 +128,8 @@ class EventService
 
     public function deleteEvent($id) : Event
     {
-        $event = Event::findOrFail($id)->delete();
+        $event = Event::findOrFail($id);
+        $event->delete();
         Redis::del('event_' . $id);
 
         return $event;

@@ -12,6 +12,10 @@ class Event extends Model
     use HasFactory;
     use SoftDeletes;
 
+    const CREATED_AT = 'createdAt';
+    const UPDATED_AT = 'updatedAt';
+    const DELETED_AT = 'deletedAt';
+
     protected $table = 'event';
     protected $guarded = [];
     public $timestamps = true;

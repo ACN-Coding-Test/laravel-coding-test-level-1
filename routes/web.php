@@ -21,10 +21,6 @@ Route::get('/', function () {
 Route::get('/home', [HomeController::class,'index'])->name('home');
 Route::get('/events', [EventController::class,'events'])->name('events');
 
-Route::get('/blogs/{id}', [EventController::class,'index'])->name('index');
-Route::post('/blogs/update/{id}',[EventController::class,'update'])->name('update');
-Route::delete('/blogs/delete/{id}', [EventController::class,'delete'])->name('delete');
-
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {    
     Route::post('/events/create',[EventController::class,'newEvent'])->name('newEvent');
     Route::post('/events/{id}/edit',[EventController::class,'updateEvent'])->name('updateEvent');

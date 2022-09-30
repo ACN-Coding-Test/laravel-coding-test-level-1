@@ -1,6 +1,6 @@
 
 <div class="modal fade" id="eventEdit{{$event['id']}}" tabindex="-1" aria-hidden="true">
-    <form id="updateEvent" name="updateEvent"  action="{{route('updateEvent',$event['id'])}}" method="POST" enctype="multipart/form-data">
+    <form id="updateEvent" name="updateEvent" action="{{route('updateEvent',$event['id'])}}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('POST')
         <div class="modal-dialog modal-dialog-centered">
