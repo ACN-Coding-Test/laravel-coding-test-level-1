@@ -55,8 +55,9 @@
 		                    <span class="text-danger">{{ $errors->first('endTime') }}</span>
 		                @endif
 					</div>
-					<div class="col-md-12 text-end mt-2">
-						<input type="submit" class="btn btn-success btn-submit" value="Add">
+					<div class="col-md-12 mt-2">
+						<a href="{{url('events/')}}" class="btn btn-secondary pull-left mt-2">Back</a>
+						<input type="submit" class="btn btn-success btn-submit pull-right mt-2" value="Add">
 					</div>
 				</div>
 				
