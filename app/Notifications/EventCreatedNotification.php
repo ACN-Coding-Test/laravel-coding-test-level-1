@@ -42,9 +42,9 @@ class EventCreatedNotification extends Notification
     {
 
         return (new MailMessage)
-                    ->line('New Event is Created');
-                    // ->action('Notification Action', url('/'))
-                    // ->line('Thank you for using our application!');
+                    ->line('New Event is Created')
+                    ->action('Notification Action', url('/'))
+                    ->line('Thank you for using our application!');
     }
 
     /**
