@@ -3,6 +3,7 @@
 @section('title', 'Events')
 
 @section('content')
+<div class="container">
 	<div class="row mt-3">
 		<div class="col-md-6">
 			<a href="{{url('events/create')}}" class="btn btn-success my-2"><i class="fa fa-plus"></i> Event</a>
@@ -54,6 +55,7 @@
 			{!! $events->appends(request()->input())->links() !!}
 		</div>
 	</div>
+</div>
 @endsection
 
 @push('scripts')
