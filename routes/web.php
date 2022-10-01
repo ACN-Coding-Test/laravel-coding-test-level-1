@@ -25,9 +25,17 @@ Route::get('/', function () {
             ->OrWhere('slug', 'like', '%' . $search . '%');
     })->paginate(10);
 // dd($events);
-return Inertia::render('Event/Event', ['events' => $events, 'filters' => Request::only(['search'])]);
-});
-Route::resource('events', EventController::class);
+return Inertia::render('Welcome', ['events' => $events, 'filters' => Request::only(['search'])]);
+})->name('welcome');
+Route::get('show/{id}', function ($id =null) {
+
+    $event = Event::find($id);
+    // dd($event);
+    return Inertia::render('Event', [
+        'event' => $event
+    ]);
+})->name('show');
+Route::resource('events', EventController::class)->middleware('auth');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');

@@ -20,12 +20,12 @@ let search = ref(props.filters.search);
 watch(search, (value) => {
     if(value==""){
         Inertia.get(
-        "/events",
+        "/",
 
     );
     }else{
   Inertia.get(
-        "/events",
+        "/",
         { search: value },
         {
             preserveState: true,
@@ -44,41 +44,46 @@ watch(search, (value) => {
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
           <div class="p-6 bg-white border-b border-gray-200">
             <div className="flex items-center justify-between mb-6">
-              <Link
-                className="px-6 py-2 text-white bg-blue-500 rounded-md focus:outline-none"
-                :href="route('events.index')"
-              >
-                Back
-              </Link>
+              <input
+                type="text"
+                v-model="search"
+                placeholder="Search..."
+                class="
+                  bg-gray-50
+                  border border-gray-300
+                  text-gray-900 text-sm
+                  rounded-lg
+                  focus:ring-blue-500 focus:border-blue-500
+                  block
+                  w-60
+                  p-2.5
+                "
+              />
+
             </div>
 
-            <form>
-              <div className="flex flex-col">
-                <div className="mb-4">
-                  <InputLabel for="name" value="Name" />
+            <table className="table-fixed w-full">
+              <thead>
+                <tr className="bg-gray-100">
+                  <!-- <th className="px-4 py-2 w-20">No.</th> -->
+                  <th className="px-4 py-2">Title</th>
+                  <th className="px-4 py-2">Body</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="event in events.data" :key="event">
+                  <!-- <td className="border px-4 py-2">{{ event.id }}</td> -->
+                  <td className="border px-4 py-2">
+                    <Link tabIndex="1" :href="route('show', event.id)">
+                      {{ event.name }}
+                    </Link>
+                  </td>
+                  <td className="border px-4 py-2">{{ event.slug }}</td>
 
-                  <TextInput
-                    id="name"
-                    type="text"
-                    class="mt-1 block w-full"
-                    v-model="form.name"
-                    disabled
-                  />
-                </div>
-
-                <div className="mb-4">
-                  <InputLabel for="slug" value="slug" />
-
-                  <TextInput
-                    id="slug"
-                    type="text"
-                    class="mt-1 block w-full"
-                    v-model="form.slug"
-                    disabled
-                  />
-                </div>
-              </div>
-            </form>
+                </tr>
+              </tbody>
+            </table>
+            <Pagination class="mt-6" :links="events.links" />
           </div>
         </div>
       </div>
