@@ -17,7 +17,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('/events','App\Http\Controllers\EventController');
+Route::resource('/events','App\Http\Controllers\EventController'); 
+
+Route::get('/locations', [App\Http\Controllers\HomeController::class, 'locations'])->name('locations');
 
 Auth::routes();
 

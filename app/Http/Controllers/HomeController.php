@@ -25,4 +25,14 @@ class HomeController extends Controller
     {
         return view('home');
     }
+
+    /**
+     * Show the locations.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function locations()
+    {
+        return view('location');
+    }
 }
