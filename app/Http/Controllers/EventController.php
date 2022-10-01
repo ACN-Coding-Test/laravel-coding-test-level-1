@@ -1,14 +1,23 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Http\Request;
-use App\Models\Event;
+use App\Models\{
+    Event,
+    User
+};
+use App\Mail\EventCreated;
+use Mail;
 
 class EventController extends Controller
 {
+    protected $redName;
+
     public function __construct()
     {
         $this->middleware('auth');
+        $this->redName = 'ev:';
     }
 
     /**
@@ -18,8 +27,8 @@ class EventController extends Controller
      */
     public function index(Request $request)
     {
-        \Log::info($request->all());
         $events = Event::filter($request)->paginate(10);
+
         return view('events.index', compact('events'));
     }
 
@@ -57,6 +66,12 @@ class EventController extends Controller
         $event->endAt = $request->endDate.' '.$request->endTime;
         $event->save();
 
+        Redis::set($this->redName . $id, $event);
+
+        //Send mail to all users
+        $users = User::pluck('email')->toArray();
+        Mail::to($users)->send(new EventCreated($event));
+
         return redirect()->route('events.show', ['event' => $event]);
     }
 
@@ -68,7 +83,13 @@ class EventController extends Controller
      */
     public function show($id)
     {
-        $event = Event::findOrFail($id);
+        $cachedData = Redis::get($this->redName . $id);
+        if(isset($cachedData)) {
+          $event = json_decode($cachedData, FALSE);
+        }else {
+          $event = Event::findOrFail($id);
+          Redis::set($this->redName . $id, $event);
+        }
 
         return view('events.show', compact('event'));
     }
@@ -81,7 +102,13 @@ class EventController extends Controller
      */
     public function edit($id)
     {
-        $event = Event::findOrFail($id);
+        $cachedData = Redis::get($this->redName . $id);
+        if(isset($cachedData)) {
+          $event = json_decode($cachedData, FALSE);
+        }else {
+          $event = Event::findOrFail($id);
+          Redis::set($this->redName . $id, $event);
+        }
 
         return view('events.edit', compact('event'));
     }
@@ -105,11 +132,15 @@ class EventController extends Controller
             'endTime.after_or_equal' => 'End Time must be after or equal the Start Time'
         ]);
 
+        Redis::del($this->redName . $id);
+
         $event = Event::findOrFail($id);
         $event->name = $request->name;
         $event->startAt = $request->startDate.' '.$request->startTime;
         $event->endAt = $request->endDate.' '.$request->endTime;
         $event->save();
+
+        Redis::set($this->redName . $id, $event);
 
         return redirect()->route('events.show', ['event' => $event]);
     }

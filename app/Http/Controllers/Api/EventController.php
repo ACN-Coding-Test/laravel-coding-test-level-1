@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Api;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Http\Request;
 use App\Http\Controllers\API\BaseController;
 use App\Models\Event;
@@ -113,6 +114,7 @@ class EventController extends BaseController
      */
     public function destroy($id)
     {
+        Redis::del('ev:' . $id);
         $event = Event::find($id);
         if($event) {
             $event->delete();

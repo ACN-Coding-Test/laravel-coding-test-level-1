@@ -43,6 +43,9 @@ class Event extends Model
         ];
     }
 
+    protected $appends = ['start_date', 'start_time', 'end_time', 'end_date'];
+
+
     public function getStartDateAttribute() {
         $date = explode(' ', $this->startAt);
         return $date[0];
