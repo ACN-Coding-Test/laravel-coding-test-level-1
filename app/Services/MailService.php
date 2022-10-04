@@ -10,10 +10,7 @@ class MailService
 	public function sendEvents($event)
 	{
         $mail = Mail::to('newuser@example.com')->send(new CreateEvent());
-        if(!$mail)
-        {
-            return false;
-        }
+        if(!$mail) return false;
         return true;
 	}
 }

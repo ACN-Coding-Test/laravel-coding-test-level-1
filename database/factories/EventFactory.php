@@ -23,9 +23,8 @@ class EventFactory extends Factory
      */
     public function definition()
     {
-        $name = $this->faker->unique()->name();
+        $name = $this->faker->unique()->text($maxNbChars = 20) . ' event';
         $slug = Str::slug($name, '-');
-
         return [
             'name' => $name,
             'slug' => $slug

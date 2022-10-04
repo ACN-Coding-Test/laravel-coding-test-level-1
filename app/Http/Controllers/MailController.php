@@ -26,11 +26,8 @@ class MailController extends Controller
     {
         $ms = new MailService();
         $mail = $ms->sendEvents([]);
-        if(!$mail) 
-        {
-            return Redirect::back()->withErrorMessage("Failed! email not send");
-        }
-
+        
+        if(!$mail) return Redirect::back()->withErrorMessage("Failed! email not send");
         return Redirect::back()->withSuccessMessage("Successfully send email");
     }
 }

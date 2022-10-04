@@ -11,26 +11,53 @@
             </ul>
         </div>
         <div class="card-body">
-            <div class="row">
-                    <h3 class="card-title">Today Forecasting</h3><hr>
-                    <div class="col-2">
-                        <p class="card-text"><strong>Location</strong></p>
-                        <p class="card-text"><strong>Timezone</strong></p>
-                        <p class="card-text"><strong>Temperature</strong></p>
-                        <p class="card-text"><strong>Description</strong></p>
-                        <p class="card-text"><strong>Condition</strong></p>
-                        <p class="card-text"><strong>Sunrise</strong></p>
-                        <p class="card-text"><strong>Sunset</strong></p>
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">Date Forecasting</h3><hr>
+                    <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-indicators">
+                            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                        </div>
+                        <div class="carousel-inner">
+                            @foreach ( $weathers['days'] as $key => $weather)
+                            <div class="carousel-item {{$key == 0 ? 'active':''}}">
+                                <div class="row">
+                                    <div class="col-2">
+                                        <p class="card-text"><strong>Location</strong></p>
+                                        <p class="card-text"><strong>Timezone</strong></p>
+                                        <p class="card-text"><strong>Date</strong></p>
+                                        <p class="card-text"><strong>Temperature</strong></p>
+                                        <p class="card-text"><strong>Description</strong></p>
+                                        <p class="card-text"><strong>Condition</strong></p>
+                                        <p class="card-text"><strong>Sunrise</strong></p>
+                                        <p class="card-text"><strong>Sunset</strong></p>
+                                    </div>
+                                    <div class="col">
+                                        <p class="card-text"> : {{$weathers['resolvedAddress']}}</p>
+                                        <p class="card-text"> : {{$weathers['timezone']}}</p>
+                                        <p class="card-text"> : {{date('l', strtotime($weather['datetime'])) . ' (' .$weather['datetime'].')'}}</p>
+                                        <p class="card-text"> : {{$weather['temperature']}} <span>&#8451;</span></p>
+                                        <p class="card-text"> : {{$weather['description']}}</p>
+                                        <p class="card-text"> : {{$weather['conditions']}}</p>
+                                        <p class="card-text"> : {{$weather['sunrise']}}</p>
+                                        <p class="card-text"> : {{$weather['sunset']}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
                     </div>
-                    <div class="col">
-                        <p class="card-text"> : {{$weather['resolvedAddress']}}</p>
-                        <p class="card-text"> : {{$weather['timezone']}}</p>
-                        <p class="card-text"> : {{$weather['temperature']}} <span>&#8451;</span></p>
-                        <p class="card-text"> : {{$weather['description']}}</p>
-                        <p class="card-text"> : {{$weather['currentConditions']}}</p>
-                        <p class="card-text"> : {{$weather['sunrise']}}</p>
-                        <p class="card-text"> : {{$weather['sunset']}}</p>
-                    </div>
+                </div>
             </div>
         </div>
     </div>

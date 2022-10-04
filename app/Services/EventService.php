@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Str;
 use App\Models\Event;
 use Carbon\Carbon;
 
@@ -18,15 +19,15 @@ class EventService
         $request = $client->get('https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/' . $state . ',' . $country .'?key='. $apiKey .'');
         $response = $request->getBody()->getContents();
 
-        return $response;
+        return json_decode($response);
     }
 
 	public function getEvents()
 	{
-        $cachedEvents = Redis::get('events_');
-    
-        if(isset($cachedEvents)) {
-            $events = json_decode($cachedEvents, TRUE);
+        $cachedEvent = Redis::get('events_');
+
+        if(!empty($cachedEvent)) {
+            $events = json_decode($cachedEvent, TRUE);
         } else {
             $events = Event::get();
             Redis::set('events_', $events);
@@ -42,7 +43,7 @@ class EventService
 
         $cachedEvents = Redis::get('events_');
     
-        if(isset($cachedEvents)) {
+        if(!empty($cachedEvents)) {
             $events = json_decode($cachedEvents, TRUE);
         } else {
             $events = Event::whereBetween('created_at', [$startAt, $endAt])->get();
@@ -54,13 +55,13 @@ class EventService
 
     public function getEventById($id) : Event
     {
-        $cachedEvent = Redis::get('event_');
+        $cachedEvent = Redis::get('event_' . $id);
     
-        if(isset($cachedEvent)) {
+        if(!empty($cachedEvent)) {
             $event = json_decode($cachedEvent, TRUE);
         } else {
             $event = Event::where('id', $id)->firstOrFail();
-            Redis::set('event_', $event);
+            Redis::set('event_' . $id, $event);
         }
 
         return $event;
@@ -75,8 +76,10 @@ class EventService
 
         $event = Event::create([
             'name' => $validated['name'],
-            'slug' => $validated['slug']
+            'slug' => Str::slug($validated['slug'], '-')
         ]);
+
+        Redis::del('events_');
 
         return $event;
     }
@@ -89,8 +92,7 @@ class EventService
         );
 
         if($event) {
-            // Delete event_$id from Redis
-            Redis::del('event_' . $request['id']);
+            Redis::del('events_');
       
             $event = Event::find($request['id']);
             // Set a new key with the event id
@@ -115,8 +117,7 @@ class EventService
         $event->save();
 
         if($event) {
-            // Delete event_$id from Redis
-            Redis::del('event_' . $request['id']);
+            Redis::del('events_');
       
             $event = Event::find($request['id']);
             // Set a new key with the event id
@@ -130,7 +131,7 @@ class EventService
     {
         $event = Event::findOrFail($id);
         $event->delete();
-        Redis::del('event_' . $id);
+        Redis::del('events_');
 
         return $event;
     }
