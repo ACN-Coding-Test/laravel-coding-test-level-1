@@ -4,8 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
-use App\Models\Event;
+
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -21,23 +20,5 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
-
-
-        for($i=0;$i<5;$i++)
-        {
-            $new= new Event();
-
-            $new->name="Api_".(string)$i+1;
-            $new->slug="Slug_".(string)$i+1;
-            $new->createdAt=now();
-            $new->updatedAt=now();
-    
-            $new->save();
-        }
-      
-
-
-        
-        
     }
 }
