@@ -29,6 +29,8 @@
 - Seed the database with dummy events (min. 5 events)
 - Merge `1-crud-api` with `main`, use PR
 
+
+
 #### Second Test - UI
 
 - Make sure that you are in `main` branch
