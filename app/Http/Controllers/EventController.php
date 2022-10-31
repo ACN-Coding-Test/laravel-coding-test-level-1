@@ -20,8 +20,8 @@ return view('pages.laravel-examples.user-management',['result'=>$result]);
     {
 
         $validator = Validator::make($request->all(), [
-            'name' => 'string',
-            'slug' => 'string',
+            'name' => 'required|string',
+            'slug' => 'required|string|unique:events',
             'startAt' => 'required|date',
             'endAt' => 'required|date'
         ]);
@@ -60,8 +60,8 @@ return view('pages.laravel-examples.user-management',['result'=>$result]);
     public function edit(request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'string',
-            'slug' => 'string',
+            'name' => 'required|string',
+            'slug' => 'required|string',
             'startAt' => 'required|date',
             'endAt' => 'required|date'
         ]);
