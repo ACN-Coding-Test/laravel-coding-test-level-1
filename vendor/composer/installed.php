@@ -1,11 +1,11 @@
 <?php return array(
     'root' => array(
-        'pretty_version' => 'v9.3.9',
-        'version' => '9.3.9.0',
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => NULL,
+        'reference' => 'd4ddde0fba19bbb21149a3e4bd3179c9595c3097',
         'name' => 'laravel/laravel',
         'dev' => true,
     ),
@@ -355,6 +355,15 @@
                 0 => '*',
             ),
         ),
+        'laravel-frontend-presets/material-dashboard' => array(
+            'pretty_version' => 'v2.0.1',
+            'version' => '2.0.1.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../laravel-frontend-presets/material-dashboard',
+            'aliases' => array(),
+            'reference' => 'c42e400f6e8863f2c34a9c799f5f9741f2e24a46',
+            'dev_requirement' => false,
+        ),
         'laravel/framework' => array(
             'pretty_version' => 'v9.37.0',
             'version' => '9.37.0.0',
@@ -365,12 +374,21 @@
             'dev_requirement' => false,
         ),
         'laravel/laravel' => array(
-            'pretty_version' => 'v9.3.9',
-            'version' => '9.3.9.0',
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => NULL,
+            'reference' => 'd4ddde0fba19bbb21149a3e4bd3179c9595c3097',
+            'dev_requirement' => false,
+        ),
+        'laravel/legacy-factories' => array(
+            'pretty_version' => 'v1.3.0',
+            'version' => '1.3.0.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../laravel/legacy-factories',
+            'aliases' => array(),
+            'reference' => '5edc7e7eb76e7b4b29221f32139bcbf806c8870f',
             'dev_requirement' => false,
         ),
         'laravel/pint' => array(
@@ -416,6 +434,15 @@
             'install_path' => __DIR__ . '/../laravel/tinker',
             'aliases' => array(),
             'reference' => 'dff39b661e827dae6e092412f976658df82dbac5',
+            'dev_requirement' => false,
+        ),
+        'laravel/ui' => array(
+            'pretty_version' => 'v4.0.2',
+            'version' => '4.0.2.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../laravel/ui',
+            'aliases' => array(),
+            'reference' => '9aa6930c8ae98b2465594d7f14f4ac131bfd6a99',
             'dev_requirement' => false,
         ),
         'league/commonmark' => array(
@@ -709,8 +736,8 @@
         'psr/log-implementation' => array(
             'dev_requirement' => false,
             'provided' => array(
-                0 => '1.0|2.0|3.0',
-                1 => '1.0.0 || 2.0.0 || 3.0.0',
+                0 => '1.0.0 || 2.0.0 || 3.0.0',
+                1 => '1.0|2.0|3.0',
             ),
         ),
         'psr/simple-cache' => array(
