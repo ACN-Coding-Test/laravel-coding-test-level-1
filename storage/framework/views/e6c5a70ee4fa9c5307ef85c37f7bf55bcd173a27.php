@@ -41,7 +41,7 @@
                                 
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label">Name</label>
-                                    <input type="text" name="search" class="form-control border border-2 p-2" value=''>
+                                    <input type="text" name="name" class="form-control border border-2 p-2" value=''>
                                     <?php $__errorArgs = ['email'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -98,7 +98,20 @@ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
                                 </div>
-                                
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label">Notification Email</label>
+                                    <input type="email"  name="email" class="form-control border border-2 p-2" value=''>
+                                    <?php $__errorArgs = ['location'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                    <p class='text-danger inputerror'><?php echo e($message); ?> </p>
+                                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                                </div>
                                 
                             </div>
                             <button type="submit" class="btn bg-gradient-dark">Submit</button>
