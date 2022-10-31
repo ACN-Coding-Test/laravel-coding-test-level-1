@@ -18,13 +18,10 @@ use App\Models\event;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
 
 
-//Route::get('/', function () {return redirect('sign-in');})->middleware('guest');
+Route::get('/', function () {return redirect('sign-in');})->middleware('guest');
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware('auth')->name('dashboard');
 Route::get('sign-up', [RegisterController::class, 'create'])->middleware('guest')->name('register');
 Route::post('sign-up', [RegisterController::class, 'store'])->middleware('guest');
@@ -40,7 +37,7 @@ Route::get('/reset-password/{token}', function ($token) {
 })->middleware('guest')->name('password.reset');
 
 Route::post('sign-out', [SessionsController::class, 'destroy'])->middleware('auth')->name('logout');
-
+Route::get('/home', function () {return redirect('dashboard');});
 Route::group(['middleware' => 'auth'], function () {
 
 	Route::get('user-management', function () {

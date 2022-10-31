@@ -4,6 +4,8 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\User;
+use App\Models\admin;
+use App\Models\accenture;
 
 
 class DatabaseSeeder extends Seeder
@@ -15,13 +17,21 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-         User::factory()->create([
+        
+      /*   admin::factory()->create([
             'name' => 'Admin',
             'email' => 'admin@material.com',
             'password' => ('secret')
         ]);
-
-
+       */
+      accenture::create([
+            'name' => 'Admin',
+            'email' => 'admin@material.com',
+            'password' => ('secret'),
+            'created_at' => now(),
+            'updated_at' => now(),
+            
+        ]);
         
     }
 }
