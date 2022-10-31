@@ -140,7 +140,7 @@ if($request->isMethod('post'))
 }
 if($request->isMethod('get'))
 {
-    $events = Event::where('id', '<=', $request->id)->get();
+    $events = Event::where('id', '=', $request->id)->get();
     if($events->count()>0)
     {
         return response()->json(['data' => $events], 201);
