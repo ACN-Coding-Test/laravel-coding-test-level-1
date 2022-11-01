@@ -46,7 +46,7 @@ $result=event::get();
 
 		return view('pages.laravel-examples.user-management',['result'=>$result]);
 	})->name('user-management');
-
+	Route::get('search', [EventController::class, 'search']);
 	Route::get('create', [EventController::class, 'create']);
 	Route::post('events/create', [EventController::class, 'eventcreate']);
 	Route::get('events/{id}', [EventController::class, 'show']);
