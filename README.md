@@ -50,6 +50,10 @@
   - Authentication -> only authenticated users can create, update and delete events
   - Calling of an external API(s) and display the data in the UI
 
+run composer require laravel/ui 
+run composer dump-autoload
+http://testing-env.eba-rggptskr.ap-southeast-1.elasticbeanstalk.com/sign-in
+
 ## Bonus points
 
 - If you follow a clean code principle
