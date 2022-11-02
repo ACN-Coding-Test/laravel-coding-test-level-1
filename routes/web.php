@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\DatatableController;
+use App\Http\Controllers\EventController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,5 +16,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/events');
+});
+Route::resource('events',EventController::class);
+Route::prefix('datatables')->group(function () {
+    Route::get('events', [DatatableController::class, 'events']);
 });

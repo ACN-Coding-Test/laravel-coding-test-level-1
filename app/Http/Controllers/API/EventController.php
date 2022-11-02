@@ -60,7 +60,7 @@ class EventController extends Controller
             'name' => 'required',
             'slug' => 'required|unique:events',
             'start_at' => 'required',
-            'end_at' => 'required'
+            'end_at' => 'required|after:start_at'
         ]);
 
         if ($validator->fails()) {
@@ -119,7 +119,7 @@ class EventController extends Controller
                 'name' => 'required',
                 'slug' => 'required|unique:events,slug,'.$event->id,
                 'start_at' => 'required',
-                'end_at' => 'required'
+                'end_at' => 'required|after:start_at'
             ]);
 
             if ($validator->fails()) {

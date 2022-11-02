@@ -16,7 +16,7 @@ class EventController extends Controller
      */
     public function index()
     {
-        //
+        return view('events.index');
     }
 
     /**
@@ -26,7 +26,8 @@ class EventController extends Controller
      */
     public function create()
     {
-        //
+        $type = 'create';
+        return view('events.form',compact('type'));
     }
 
     /**
@@ -48,7 +49,14 @@ class EventController extends Controller
      */
     public function show(Request $request)
     {
-        //
+        $type = 'show';
+        $event = Event::where('id',$request->event)->first();
+
+        if ($event) {
+            return view('events.form',compact('type','event'));
+        } else {
+            return redirect('/events')->withErrors(['message'=>'Event not found.']);
+        }
     }
 
     /**
@@ -57,9 +65,16 @@ class EventController extends Controller
      * @param  \App\Models\Event  $event
      * @return \Illuminate\Http\Response
      */
-    public function edit(Event $event)
+    public function edit(Request $request)
     {
-        //
+        $type = 'update';
+        $event = Event::where('id',$request->event)->first();
+
+        if ($event) {
+            return view('events.form',compact('type','event'));
+        } else {
+            return redirect('/events')->withErrors(['message'=>'Event not found.']);
+        }
     }
 
     /**
