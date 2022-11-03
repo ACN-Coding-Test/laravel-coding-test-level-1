@@ -27,6 +27,10 @@
             <a class="navbar-brand" href="{{ url('/') }}">
                 {{ config('app.name', 'Laravel') }}
             </a>
+
+            @if(Cookie::get('session_id'))
+                <a href="/auth/logout">Logout</a>
+            @endif
         </div>
     </nav>
 

@@ -3,14 +3,22 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\SendNewEventEmailJob;
 use App\Models\Event;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Redis;
 
 class EventController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:api')->except(['index']);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -18,13 +26,26 @@ class EventController extends Controller
      */
     public function index()
     {
-        $events = Event::select('id','name','slug')
-            ->orderBy('start_at')
-            ->get();
+        $events = Cache::remember('events', now()->addMinutes(150), function () {
+            $data = array();
+            $dataDbs = Event::select('id','name','slug')
+                ->orderBy('start_at')
+                ->get();
+
+            foreach ($dataDbs as $dataDb) {
+                $data[] = array(
+                    'id' => $dataDb->id,
+                    'name' => $dataDb->name,
+                    'slug' => $dataDb->slug
+                );
+            }
+
+            return $data;
+        });
+
 
         return response()->json([
             'success' => true,
-            'count' => $events->count(),
             'data' => $events
         ]);
     }
@@ -36,14 +57,26 @@ class EventController extends Controller
      */
     public function active_events()
     {
-        $events = Event::select('id','name','slug')
-            ->whereRaw('NOW() BETWEEN start_at AND end_at')
-            ->orderBy('start_at')
-            ->get();
+        $events = Cache::remember('events', now()->addMinutes(150), function () {
+            $data = array();
+            $dataDbs = Event::select('id','name','slug')
+                ->whereRaw('NOW() BETWEEN start_at AND end_at')
+                ->orderBy('start_at')
+                ->get();
+
+            foreach ($dataDbs as $dataDb) {
+                $data[] = array(
+                    'id' => $dataDb->id,
+                    'name' => $dataDb->name,
+                    'slug' => $dataDb->slug
+                );
+            }
+
+            return $data;
+        });
 
         return response()->json([
             'success' => true,
-            'count' => $events->count(),
             'data' => $events
         ]);
     }
@@ -73,6 +106,8 @@ class EventController extends Controller
         $event = new Event();
         $event->fill($request->all());
         $event->save();
+
+        dispatch(new SendNewEventEmailJob($event));
 
         return response()->json([
             'success' => true,

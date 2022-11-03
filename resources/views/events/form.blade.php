@@ -55,7 +55,12 @@
                 $.ajax({
                     type: type,
                     url: url,
+                    contentType: "application/json",
                     data: $("#form").serialize(),
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                        "Authorization": "Bearer {{ $session_id }}"
+                    },
                     success: function(data){
                         if (data.success) {
                             Swal.fire({
@@ -79,6 +84,17 @@
                                 html: message,
                             })
                         }
+                    },
+                    error: function (data) {
+                        var json = JSON.parse(data.responseText);
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            html: json.message,
+                        }).then((result) => {
+                            window.location.href = '/';
+                        });
                     }
                 });
             });

@@ -67,6 +67,10 @@
                         $.ajax({
                             type: "DELETE",
                             url: "{{ env('API_URL') . "/events/" }}"+rowData['id'],
+                            headers: {
+                                "Content-Type": "application/x-www-form-urlencoded",
+                                "Authorization": "Bearer {{ $session_id }}"
+                            },
                             success: function(data){
                                 if (data.success) {
                                     Swal.fire({
@@ -83,6 +87,17 @@
                                         confirmButtonText: 'Ok'
                                     });
                                 }
+                            },
+                            error: function (data) {
+                                var json = JSON.parse(data.responseText);
+
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    html: json.message,
+                                }).then((result) => {
+                                    window.location.href = '/';
+                                });
                             }
                         });
                     }
