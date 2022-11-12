@@ -13,9 +13,12 @@ use App\Http\Controllers\EventController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::resource('events', EventController::class);
+Route::middleware(['auth'])->group(function () {
+    Route::resource('events', EventController::class);
+});
+
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 
 Auth::routes();

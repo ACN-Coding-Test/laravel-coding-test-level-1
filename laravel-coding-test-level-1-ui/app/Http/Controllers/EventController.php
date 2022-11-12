@@ -2,11 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
+use App\Notifications\NewEvent;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 
 class EventController extends Controller
 {
+    private $baseUrl = "http://127.0.0.1:8080/";
     /**
      * Display a listing of the resource.
      *
@@ -14,11 +19,10 @@ class EventController extends Controller
      */
     public function index()
     {
-        $url = "http://127.0.0.1:8080/api/v1/events";
+        $url = $this->baseUrl."api/v1/events";
         $client = new Client();
         $response = $client->request('GET', $url);
         $events = json_decode($response->getBody()->getContents());
-        // dd($events);
 
         return view('index', compact('events'));
     }
@@ -41,8 +45,7 @@ class EventController extends Controller
      */
     public function store(Request $request)
     {
-        // dd("masuk");
-        $url = "http://127.0.0.1:8080/api/v1/events/";
+        $url = $this->baseUrl."api/v1/events/";
         $client = new Client();
         $response = $client->request('POST', $url, [
             'json' => [
@@ -52,6 +55,8 @@ class EventController extends Controller
             ]
         ]);
 
+        $user = User::find(Auth::user()->id);
+        Notification::send($user, new NewEvent($request, $user->name));
         return redirect()->route('events.store')->with('message', 'Created successfully!');
     }
 
@@ -63,7 +68,7 @@ class EventController extends Controller
      */
     public function show($id)
     {
-        $url = "http://127.0.0.1:8080/api/v1/events/".$id;
+        $url = $this->baseUrl."api/v1/events/".$id;
         $client = new Client();
         $response = $client->request('GET', $url);
         $event = json_decode($response->getBody()->getContents());
@@ -79,7 +84,7 @@ class EventController extends Controller
      */
     public function edit($id)
     {
-        $url = "http://127.0.0.1:8080/api/v1/events/".$id;
+        $url = $this->baseUrl."api/v1/events/".$id;
         $client = new Client();
         $response = $client->get($url, [
             'headers' => [
@@ -102,7 +107,7 @@ class EventController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $url = "http://127.0.0.1:8080/api/v1/events/".$id;
+        $url = $this->baseUrl."api/v1/events/".$id;
         $client = new Client();
         $response = $client->request('PUT', $url, [
             'json' => [
@@ -123,7 +128,7 @@ class EventController extends Controller
      */
     public function destroy($id)
     {
-        $url = "http://127.0.0.1:8080/api/v1/events/".$id;
+        $url = $this->baseUrl."api/v1/events/".$id;
         $client = new Client();
         $response = $client->delete($url);
 

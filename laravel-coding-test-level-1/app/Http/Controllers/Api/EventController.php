@@ -7,6 +7,7 @@ use App\Models\Event;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Cache;
 
 class EventController extends Controller
 {
@@ -17,7 +18,9 @@ class EventController extends Controller
      */
     public function index()
     {
-        $events = Event::all();
+        $events = Cache::rememberForever('events', function () {
+            return Event::orderBy('created_at', 'desc')->get();
+        });
         return $events;
     }
 
@@ -44,6 +47,7 @@ class EventController extends Controller
         $event->slug = $event->name.'-'.$event->id;
         $event->save();
 
+        Cache::forget('events');
         return response()->json(['message'=>'created successfully.', 'event' => $event]);
     }
 
@@ -53,8 +57,12 @@ class EventController extends Controller
      * @param  \App\Models\Event  $event
      * @return \Illuminate\Http\Response
      */
-    public function show(Event $event)
+    public function show($id)
     {
+        $event = Cache::rememberForever($id, function () use($id) {
+            return Event::find($id);
+        });
+
         return $event;
     }
 
@@ -73,11 +81,11 @@ class EventController extends Controller
             'endAt' => 'required'
         ]);
 
-        $count = Event::where('name', $request->name)->count();
-        if($count == 0) {
+        if(!Event::where('name', $request->name)->exists()) {
             $event = new Event();
         } else {
             $event = Event::where('name', $request->name)->first();
+            Cache::forget($event->id);
         }
 
         $event->name = $request->name;
@@ -87,6 +95,8 @@ class EventController extends Controller
         $event->save();
         $event->slug = $event->name.'-'.$event->id;
         $event->save();
+
+        Cache::forget('events');
 
         return response()->json(['message'=>"success", "event"=>$event]);
     }
@@ -99,6 +109,8 @@ class EventController extends Controller
      */
     public function destroy(Event $event)
     {
+        Cache::forget($event->id);
+        Cache::forget('events');
         $event->delete();
 
         return response()->json(["message"=>"deleted successfully"]);

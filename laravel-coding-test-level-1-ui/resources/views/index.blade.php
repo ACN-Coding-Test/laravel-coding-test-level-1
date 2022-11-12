@@ -26,7 +26,7 @@
               @foreach ($events as $event)
                 <tr>
                     <th scope="row">{{ $loop->iteration }}</th>
-                    <td><a href="{{ route('events.show', ['event'=>$event->id]) }}" style="text-decoration: none; color: black">{{ $event->name }}</a></td>
+                    <td><a href="{{ route('events.show', ['event'=>$event->id]) }}">{{ $event->name }}</a></td>
                     <td>{{ $event->startAt }}</td>
                     <td>{{ $event->endAt }}</td>
                     <td><form action="{{ route('events.destroy', ['event'=>$event->id]) }}" method="POST">
