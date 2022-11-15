@@ -17,3 +17,19 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+$router->group(['prefix' => 'v1'], function () use ($router) {
+    $router->group(['prefix' => 'events'], function () use ($router) {
+        $ctlr = App\Http\Controllers\Api\EventController::class.'@';
+
+        $router->get('/', $ctlr . 'index');
+        $router->get('/active-events', $ctlr . 'activeEvent');
+        $router->get('/{id}', $ctlr . 'show');
+        $router->post('/', $ctlr . 'create');
+        $router->patch('/{id}', $ctlr . 'update');
+        $router->delete('/{id}', $ctlr . 'delete');
+    });
+});
+
+
+

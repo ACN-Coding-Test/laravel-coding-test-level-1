@@ -174,7 +174,8 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-
+        RaditzFarhan\ApiResponse\ApiResponseServiceProvider::class,
+        Laraditz\Action\ActionServiceProvider::class,
     ],
 
     /*

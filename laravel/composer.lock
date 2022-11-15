@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b5ca55ba1523e7393fd17ce2ccf9da2c",
+    "content-hash": "9bb2ac0da4ade78ac433f52c90bcd01a",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -804,6 +804,50 @@
                 "url"
             ],
             "time": "2022-10-26T14:07:24+00:00"
+        },
+        {
+            "name": "laraditz/action",
+            "version": "1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laraditz/action.git",
+                "reference": "ef702a118903212b9de7c1fa06a6fb47109098f6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laraditz/action/zipball/ef702a118903212b9de7c1fa06a6fb47109098f6",
+                "reference": "ef702a118903212b9de7c1fa06a6fb47109098f6",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/console": "^7.0|^8.0",
+                "illuminate/support": "^7.0|^8.0",
+                "php": "^7.2.5"
+            },
+            "type": "laravel-package",
+            "autoload": {
+                "psr-4": {
+                    "Laraditz\\Action\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Raditz Farhan",
+                    "email": "raditzfarhan@gmail.com"
+                }
+            ],
+            "description": "Single action class for Laravel and Lumen to keep your application DRY",
+            "keywords": [
+                "action",
+                "dry",
+                "laravel",
+                "lumen"
+            ],
+            "time": "2020-08-23T14:11:31+00:00"
         },
         {
             "name": "laravel/breeze",
@@ -2368,6 +2412,62 @@
                 "shell"
             ],
             "time": "2022-11-06T15:29:46+00:00"
+        },
+        {
+            "name": "raditzfarhan/laravel-api-response",
+            "version": "v1.0.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/raditzfarhan/laravel-api-response.git",
+                "reference": "5e5a353132ebd79aba3d5711cd35f8c9989ec1bf"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/raditzfarhan/laravel-api-response/zipball/5e5a353132ebd79aba3d5711cd35f8c9989ec1bf",
+                "reference": "5e5a353132ebd79aba3d5711cd35f8c9989ec1bf",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/http": "^6.0|^7.0|^8.0",
+                "illuminate/support": "^6.0|^7.0|^8.0",
+                "php": "^7.2.5|^8.0"
+            },
+            "type": "laravel-package",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "RaditzFarhan\\ApiResponse\\ApiResponseServiceProvider"
+                    ],
+                    "aliases": {
+                        "ApiResponse": "RaditzFarhan\\ApiResponse\\Facades\\ApiResponse"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "RaditzFarhan\\ApiResponse\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Raditz Farhan",
+                    "email": "raditzfarhan@gmail.com"
+                }
+            ],
+            "description": "Laravel and Lumen API response transformer",
+            "keywords": [
+                "api",
+                "laravel",
+                "lumen",
+                "responder",
+                "response",
+                "transformer"
+            ],
+            "time": "2021-10-12T09:15:07+00:00"
         },
         {
             "name": "ralouphie/getallheaders",
