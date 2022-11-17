@@ -11,7 +11,7 @@
         "laraditz/action": "^1.0",
         "laravel/breeze": "1.9.4",
         "laravel/framework": "^8.75",
-        "laravel/sanctum": "^2.11",
+        "laravel/sanctum": "^2.15",
         "laravel/tinker": "^2.5",
         "raditzfarhan/laravel-api-response": "^1.0"
     },
