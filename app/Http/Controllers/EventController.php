@@ -86,4 +86,10 @@ class EventController extends Controller
 
         return $response;
     }
+    
+    public function events() {
+
+        $events = Event::all()->toArray();
+        return view('Events',['event_list' => $events]);
+    }
 }
