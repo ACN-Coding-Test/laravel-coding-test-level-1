@@ -57,10 +57,11 @@ class EventController extends Controller
     public function store(Request $request)
     {
         try {
+            $result = uniqid();
             $events = Event::create([
-                // 'uuid' => $request->language,
+                'id' => Str::uuid(),
                 'name' => $request->name,
-                'slug' => Str::slug($request->slug),
+                'slug' => Str::slug($request->name).$result,
                 'start_at' => $request->start_at,
                 'end_at' => $request->end_at,
             ]);
