@@ -1,62 +1,51 @@
-# Laravel Live Coding Test
+<p align="center"><img src="https://laravel.com/assets/img/components/logo-laravel.svg"></p>
 
-## Follow this steps
+<p align="center">
+<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
+</p>
 
-#### Application Setup (DO THIS FIRST)
+## About Laravel
 
-- **Fork this repository** into your **GitHub** account (You can create a **GitHub** account if you don't have one)
-- Clone the repository from **your repository**
+Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as:
 
-#### First Test - CRUD REST API
+- [Simple, fast routing engine](https://laravel.com/docs/routing).
+- [Powerful dependency injection container](https://laravel.com/docs/container).
+- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
+- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
+- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
+- [Robust background job processing](https://laravel.com/docs/queues).
+- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
 
-- Make sure that you are in `main` branch
-- Create a new branch and name it `1-crud-api`
-- Create a model with name `Event`
-- `Event` will have these properties
-  - **id** -> PK, UNIQUE, value must be a UUID
-  - **name** -> String
-  - **slug** -> UNIQUE, String
-  - **createdAt** -> NOT NULL, DateTime
-  - **updatedAt** -> NOT NULL, DateTime
-- Create these APIs
-  - GET /api/v1/events -> Return all events from the database
-  - GET /api/v1/events/active-events -> Return all events that are active = current datetime is within startAt and endAt
-  - GET /api/v1/events/{id} -> Get one event
-  - POST /api/v1/events -> Create an event
-  - PUT /api/v1/events/{id} -> Create event if not exist, else update the event in idempotent way
-  - PATCH /api/v1/events/{id} -> Partially update event
-  - DELETE /api/v1/events/{id} -> Soft delete an event
-- Seed the database with dummy events (min. 5 events)
-- Merge `1-crud-api` with `main`, use PR
+Laravel is accessible, yet powerful, providing tools needed for large, robust applications. A superb combination of simplicity, elegance, and innovation give you tools you need to build any application with which you are tasked.
 
-#### Second Test - UI
+## Learning Laravel
 
-- Make sure that you are in `main` branch
-- Create a new branch and name it `2-ui`
-- Create these views
-  - /events -> Show all events in the table (search and pagination has bonus point). Last column should display 2 buttons on each row to update and delete the event
-  - /events/{id} -> Show individual event
-  - /events/create -> Create an event
-  - /events/{id}/edit -> Edit an event
-- Merge `2-ui` with `main`, use PR
+Laravel has the most extensive and thorough documentation and video tutorial library of any modern web application framework. The [Laravel documentation](https://laravel.com/docs) is thorough, complete, and makes it a breeze to get started learning the framework.
 
-#### Third Test - Advance Topic
+If you're not in the mood to read, [Laracasts](https://laracasts.com) contains over 900 video tutorials on a range of topics including Laravel, modern PHP, unit testing, JavaScript, and more. Boost the skill level of yourself and your entire team by digging into our comprehensive video library.
 
-- Make sure that you are in `main` branch
-- Create a new branch and name it `3-advance-topic`
-- Implement these features
-  - Server side data caching with redis
-  - Send an email everytime an event is created (you can use mailtrap or other smtp provider that's easy to setup)
-  - Authentication -> only authenticated users can create, update and delete events
-  - Calling of an external API(s) and display the data in the UI
+## Laravel Sponsors
 
-## Bonus points
+We would like to extend our thanks to the following sponsors for helping fund on-going Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](http://patreon.com/taylorotwell):
 
-- If you follow a clean code principle
-- If you follow a good git practice
-- If you deploy the application on the internet
+- **[Vehikl](http://vehikl.com)**
+- **[Tighten Co.](https://tighten.co)**
+- **[British Software Development](https://www.britishsoftware.co)**
+- **[Styde](https://styde.net)**
+- [Fragrantica](https://www.fragrantica.com)
+- [SOFTonSOFA](https://softonsofa.com/)
 
-## Finally
+## Contributing
 
-- Push all the codes into the your remote repository
-- Make sure the repository is public
+Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](http://laravel.com/docs/contributions).
+
+## Security Vulnerabilities
+
+If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
+
+## License
+
+The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
