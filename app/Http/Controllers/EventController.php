@@ -10,11 +10,15 @@ class EventController extends Controller
 {
    
     // Return all events
+    // data returned by Event::all() is cached for 60 minutes with the key events. 
+    // If a cache entry with the key events exists, the cached data will be returned instead of querying the database
     public function index() 
     {
-        $getEvents = Event::all();
-
-        return response()->json($getEvents);
+        $events = Cache::remember('events', 60, function() {
+            return Event::all();
+        });
+    
+        return response()->json($events);
     }
 
     // Return active events, datetime between startAt and EndAt
@@ -49,6 +53,9 @@ class EventController extends Controller
         $event->endAt       = $request->endAt;
         $event->createdAt   = date('Y-m-d H:i:s');
         $event->save();
+        
+        // Send an email
+        Mail::to('email@example.com')->send(new EventCreated($event));
 
         return response()->json(['message' => 'Success create event', 'code' => 200, 'event' => $event]);
     }
