@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\EventRequest;
 use App\Models\Event;
-use Database\Factories\EventFactory;
-use Illuminate\Http\Request;
 
 class EventController extends Controller
 {
@@ -16,7 +14,9 @@ class EventController extends Controller
      */
     public function index()
     {
-        return Event::paginate(10);
+        $events = Event::paginate(10);
+
+        return $this->sendResponse('Events successfully retrieved', $events, 200);
     }
 
     /**
@@ -27,7 +27,13 @@ class EventController extends Controller
      */
     public function store(EventRequest $request)
     {
-        //
+        $event = Event::create($request->validated());
+
+        if ($event) {
+            return $this->sendResponse('Event successfully created', $event, 200);
+        }
+
+        return $this->sendError('Failed to create event', null, 404);
     }
 
     /**
@@ -36,9 +42,9 @@ class EventController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Event $event)
     {
-        //
+        return $this->sendResponse('Event successfully retrieved', $event, 200);
     }
 
     /**
@@ -48,9 +54,15 @@ class EventController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(EventRequest $request, $id)
     {
-        //
+        $event = Event::updateOrCreate(['id' => $id], $request->validated());
+
+        if ($event) {
+            return $this->sendResponse('Event successfully updated or created', $event, 200);
+        }
+
+        return $this->sendError('Failed to update event', null, 404);
     }
 
     /**
@@ -59,8 +71,13 @@ class EventController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Event $event)
     {
-        //
+        $res = $event->delete();
+
+        if ($res) {
+            return $this->sendResponse('Event successfully deleted', $event, 200);
+        }
+        return $this->sendError('Failed to delete event', null, 404);
     }
 }

@@ -11,5 +11,5 @@ class Event extends Model
 {
     use HasFactory, UsesUuidTrait, SoftDeletes;
 
-    protected $guarded = ['id'];
+    protected $fillable = ['id', 'name', 'slug'];
 }
