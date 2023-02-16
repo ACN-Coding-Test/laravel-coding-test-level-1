@@ -80,4 +80,8 @@ class EventController extends Controller
         }
         return $this->sendError('Failed to delete event', null, 404);
     }
+
+    public function activeEvents()
+    {
+    }
 }
