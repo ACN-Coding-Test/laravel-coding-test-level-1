@@ -10,4 +10,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Event extends Model
 {
     use HasFactory, UsesUuidTrait, SoftDeletes;
+
+    protected $guarded = ['id'];
 }
