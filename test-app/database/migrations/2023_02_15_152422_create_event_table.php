@@ -15,7 +15,10 @@ return new class extends Migration
             $table->uuid('id');
             $table->string('name');
             $table->string('slug');
+            $table->datetime('startAt');
+            $table->datetime('endAt');
             $table->timestamps();
+            $table->softDeletes();
 
             $table->unique('slug');
             $table->renameColumn('created_at', 'createdAt');

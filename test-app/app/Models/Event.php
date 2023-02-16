@@ -18,6 +18,8 @@ class Event extends Model
     // protected $fillable = ['name', 'slug'];
     protected $casts = [
         'name' => 'string',
-        'slug' => 'string'
+        'slug' => 'string',
+        'startAt' => 'datetime',
+        'endAt' => 'datetime'
     ];
 }

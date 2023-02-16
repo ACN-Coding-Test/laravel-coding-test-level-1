@@ -19,13 +19,18 @@ class EventFactory extends Factory
 
     public function definition(): array
     {
-        $created_at = fake()->dateTimeThisYear();
-        $updated_at = strtotime('+1 Week', $created_at->getTimestamp());
+        $startAt = fake()->dateTimeBetween('-3 day', '+1 day');
+        $endAt = strtotime('+1 Week', $startAt->getTimestamp());
+
+        $createdAt = fake()->dateTimeThisYear();
+        $updatedAt = strtotime('+1 Week', $createdAt->getTimestamp());
         return [
             'name' => fake()->name(),
             'slug' => fake()->unique()->realText(),
-            'createdAt' => $created_at,
-            'updatedAt' => $updated_at,
+            'startAt' => $startAt,
+            'endAt' => $endAt,
+            'createdAt' => $createdAt,
+            'updatedAt' => $updatedAt,
         ];
     }
 }
