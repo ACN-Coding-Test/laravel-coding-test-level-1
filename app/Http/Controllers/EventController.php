@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ActiveEventRequest;
 use App\Http\Requests\EventRequest;
 use App\Models\Event;
+use Carbon\Carbon;
 
 class EventController extends Controller
 {
@@ -81,7 +83,26 @@ class EventController extends Controller
         return $this->sendError('Failed to delete event', null, 404);
     }
 
-    public function activeEvents()
+    public function activeEvents(ActiveEventRequest $request)
     {
+        $validated = $request->validated();
+
+        if (!$validated) {
+            return $this->sendError('Failed to retrieve active events', null, 404);
+        }
+        $startAt = Carbon::parse($validated['start_at']);
+        $endAt = Carbon::parse($validated['end_at']);
+
+        if ($startAt > $endAt) {
+
+            return $this->sendError('Start At must be earlier than End At', null, 404);
+        }
+
+        $events = Event::whereDate('start_at', '>=', $startAt)->whereDate('end_at', '<=', $endAt)->get();
+
+        if ($events->isNotEmpty()) {
+            return $this->sendResponse('Active events successfully retrieve', $events, 200);
+        }
+        return $this->sendError('Active events not found', null, 202);
     }
 }
