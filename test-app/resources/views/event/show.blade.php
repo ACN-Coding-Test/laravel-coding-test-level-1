@@ -15,9 +15,14 @@
 			<div><strong>End at: </strong><span id="end-at"></span></div>
 		</div>
 	</div>
+	<button type="button" class="btn btn-secondary my-3" id="btn-back">Back</button>
 </div>
 <script>
 loadEventsData();
+
+document.querySelector('#btn-back').addEventListener('click', function() {
+	window.location.href = "http://127.0.0.1:8000/events/";
+});
 	
 function loadEventsData() {
 	// Url for the request 

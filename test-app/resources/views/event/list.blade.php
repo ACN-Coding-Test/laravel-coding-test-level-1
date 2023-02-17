@@ -63,11 +63,27 @@ function bindEventAction() {
 		btn.addEventListener('click', function(evt) {
 			let action = evt.currentTarget.dataset.act;
 			let id = evt.currentTarget.dataset.id;
-			console.log(action);
-			console.log(id);
 			if(action === 'delete') {
 				if(confirm("Are you sure you want to delete this event?")) {
+					// Url for the request 
+					const url = 'http://127.0.0.1:8000/api/v1/events/'+id;
+					const requestHeader = {
+						method: 'DELETE',
+					};
 
+					// Making our request 
+					fetch(url, requestHeader)
+						.then((response) => response.json())
+						.then((data) => {
+							if(data.hasOwnProperty('error')) {
+								alert(data.error);
+							}
+							else {
+								loadEventsData();
+							}
+						})
+						.catch((error) => { console.log(error); }
+					);
 				}
 			}
 			else if(action === 'update') {

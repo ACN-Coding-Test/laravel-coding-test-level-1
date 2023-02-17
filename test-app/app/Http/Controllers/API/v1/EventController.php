@@ -83,9 +83,8 @@ class EventController extends Controller
         if($request->filled('endAt')) {
             $event->endAt = $request->endAt;
         }
-        
         $event->save();
-        return json_encode($event);
+        return json_encode([$event, $request]);
     }
 
     /**
