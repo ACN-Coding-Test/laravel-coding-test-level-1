@@ -7,6 +7,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Cache;
 
 use App\Models\Event;
 
@@ -17,7 +18,14 @@ class EventController extends Controller
      */
     public function index()
     {
-        $events = Event::all();
+        if (Cache::has('event_list')) {
+            $events = Cache::get('event_list');
+        }
+        else {
+            $events = Event::all();
+            Cache::put('event_list', $events, $seconds = 60); //last for 1 minute
+        }
+        
         return json_encode($events);
     }
 
