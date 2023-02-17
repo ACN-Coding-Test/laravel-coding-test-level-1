@@ -20,5 +20,6 @@ Route::get('/', function () {
 });
 
 Route::get('/events', [EventController::class, 'index']);
+Route::get('/events/create', [EventController::class, 'create']);
 Route::get('/events/{id}', [EventController::class, 'show']);
 Route::get('/events/{id}/edit', [EventController::class, 'edit']);
