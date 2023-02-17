@@ -44,6 +44,7 @@ document.querySelector('#btn-save').addEventListener('click', function() {
 			'slug': eventSlug,
 			'startAt': startAt,
 			'endAt': endAt,
+			'email': "{{ $userEmail }}"
 		}
 
 

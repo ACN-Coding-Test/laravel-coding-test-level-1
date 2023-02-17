@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 use App\Models\Event;
 
@@ -16,7 +17,7 @@ class EventController extends Controller
 
     public function create()
     {
-        return response()->view('event.create');
+        return response()->view('event.create', ['userEmail' => Auth::user()->email]);
     }
 
     public function show(string $id)

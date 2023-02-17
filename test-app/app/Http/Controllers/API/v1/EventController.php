@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
+use App\Mail\EventCreated;
+use Illuminate\Support\Facades\Mail;
 
 use App\Models\Event;
 
@@ -53,8 +55,14 @@ class EventController extends Controller
         $event->save();
 
         if($event->id) {
+            if ($request->has('email')) {
+                Mail::to($request->email)->send(new EventCreated($event));
+            }
+            
             return json_encode($event);
         }
+
+        return json_encode(['error' => 'Create event failed!']);
     }
 
     /**
