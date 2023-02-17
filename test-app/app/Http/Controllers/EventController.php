@@ -13,4 +13,14 @@ class EventController extends Controller
     {
         return response()->view('event.list');
     }
+
+    public function show(string $id)
+    {
+        return response()->view('event.show', ['id' => $id]);
+    }
+
+    public function edit(string $id)
+    {
+        return response()->view('event.edit', ['id' => $id]);
+    }
 }
