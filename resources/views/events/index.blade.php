@@ -67,10 +67,9 @@
                                             <td class="align-middle text-center text-sm">
                                                 <div class="row">
                                                     <div class="col-6">
-                                                        <a href="javascript:;" type="button"
-                                                            class="text-secondary font-weight-bold text-xs"
-                                                            data-toggle="tooltip" data-original-title="Edit event"
-                                                            data-bs-toggle="modal" data-bs-target="#editEventModal">
+                                                        <a href="{{ route('event.show', ['event' => $event->id]) }}"
+                                                            type="button"
+                                                            class="text-secondary font-weight-bold text-xs">
                                                             Edit
                                                         </a>
                                                     </div>
@@ -162,7 +161,6 @@
     </div>
 </form>
 
-
 <!-- Delete Event Modal -->
 <div class="modal fade" id="deleteEventModal" tabindex="-1" role="dialog" aria-labelledby="deleteEventModal"
     aria-hidden="true">
@@ -180,37 +178,6 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-link  ml-auto" data-bs-dismiss="modal">Close</button>
                 <button type="button" class="btn bg-gradient-danger">Delete</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Edit Event Modal -->
-<div class="modal fade" id="editEventModal" tabindex="-1" role="dialog" aria-labelledby="editEventModalTitle"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Edit event</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form>
-                    <div class="form-group">
-                        <label for="name" class="col-form-label">Name</label>
-                        <input type="text" class="form-control" id="name">
-                    </div>
-                    <div class="form-group">
-                        <label for="description" class="col-form-label">Description</label>
-                        <textarea class="form-control" id="description"></textarea>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn bg-gradient-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn bg-gradient-primary">Submit</button>
             </div>
         </div>
     </div>

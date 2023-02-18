@@ -69,9 +69,10 @@ Route::group(['middleware' => 'auth'], function () {
         return view('dashboard');
     })->name('sign-up');
 
-    Route::get('/events', [EventController::class, 'index']);
+    Route::get('/events', [EventController::class, 'index'])->name('event.index');
     Route::post('/events', [EventController::class, 'store'])->name('event.store');
-    Route::get('/events/{event}', [EventController::class, 'show']);
+    Route::post('/events/update/{id}', [EventController::class, 'update'])->name('event.update');
+    Route::get('/events/{event}', [EventController::class, 'show'])->name('event.show');
 });
 
 

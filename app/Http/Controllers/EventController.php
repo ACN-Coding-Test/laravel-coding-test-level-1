@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ActiveEventRequest;
-use App\Http\Requests\EventRequest;
+use App\Http\Requests\CreateEventRequest;
+use App\Http\Requests\UpdateEventRequest;
 use App\Models\Event;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Redirect;
@@ -29,7 +30,7 @@ class EventController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(EventRequest $request)
+    public function store(CreateEventRequest $request)
     {
         $event = new Event();
         $event->id = Str::uuid();
@@ -60,15 +61,13 @@ class EventController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(EventRequest $request, $id)
+    public function update(UpdateEventRequest $request, $id)
     {
-        $event = Event::updateOrCreate(['id' => $id], $request->validated());
+        Event::updateOrCreate(['id' => $id], $request->validated());
 
-        if ($event) {
-            return $this->sendResponse('Event successfully updated or created', $event, 200);
-        }
+        $events = Event::orderBy('created_at', 'desc')->paginate(10);
 
-        return $this->sendError('Failed to update event', null, 404);
+        return redirect()->route('event.index');
     }
 
     /**
