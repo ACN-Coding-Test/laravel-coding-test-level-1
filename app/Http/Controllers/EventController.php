@@ -18,7 +18,8 @@ class EventController extends Controller
     {
         $events = Event::paginate(10);
 
-        return $this->sendResponse('Events successfully retrieved', $events, 200);
+        return view('events.index', ['events' => $events]);
+        // return $this->sendResponse('Events successfully retrieved', $events, 200);
     }
 
     /**
