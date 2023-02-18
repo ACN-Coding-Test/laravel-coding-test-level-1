@@ -1,5 +1,4 @@
 @extends('layouts.app')
-
 <main class="main-content position-relative max-height-vh-100 h-100 mt-1 border-radius-lg ">
     <div class="container-fluid py-4">
         <div class="row">
@@ -83,33 +82,16 @@
                                 </tbody>
                             </table>
                         </div>
+                        <div class="row align-middle text-center mt-3">
+                            <div class="col-12">
+                                {{ $events->links() }}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="row">
-            <nav aria-label="Page navigation example">
-                <ul class="pagination justify-content-center">
-                    {{-- {{ $events->paginate() }} --}}
 
-                    <li class="page-item disabled">
-                        <a class="page-link" href="javascript:;" tabindex="-1">
-                            <i class="fa fa-angle-left"></i>
-                            <span class="sr-only">Previous</span>
-                        </a>
-                    </li>
-                    <li class="page-item"><a class="page-link" href="javascript:;">1</a></li>
-                    <li class="page-item active"><a class="page-link" href="javascript:;">2</a></li>
-                    <li class="page-item"><a class="page-link" href="javascript:;">3</a></li>
-                    <li class="page-item">
-                        <a class="page-link" href="javascript:;">
-                            <i class="fa fa-angle-right"></i>
-                            <span class="sr-only">Next</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-        </div>
     </div>
 </main>
 
