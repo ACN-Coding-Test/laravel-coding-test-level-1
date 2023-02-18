@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ChangePasswordController;
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InfoUserController;
 use App\Http\Controllers\RegisterController;
@@ -25,48 +26,56 @@ use Illuminate\Support\Facades\Route;
 Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/', [HomeController::class, 'home']);
-	Route::get('dashboard', function () {
-		return view('dashboard');
-	})->name('dashboard');
+    Route::get('dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
 
-	Route::get('billing', function () {
-		return view('billing');
-	})->name('billing');
+    Route::get('billing', function () {
+        return view('billing');
+    })->name('billing');
 
-	Route::get('profile', function () {
-		return view('profile');
-	})->name('profile');
+    Route::get('profile', function () {
+        return view('profile');
+    })->name('profile');
 
-	Route::get('rtl', function () {
-		return view('rtl');
-	})->name('rtl');
+    Route::get('rtl', function () {
+        return view('rtl');
+    })->name('rtl');
 
-	Route::get('user-management', function () {
-		return view('laravel-examples/user-management');
-	})->name('user-management');
+    Route::get('user-management', function () {
+        return view('laravel-examples/user-management');
+    })->name('user-management');
 
-	Route::get('tables', function () {
-		return view('tables');
-	})->name('tables');
+    Route::get('tables', function () {
+        return view('tables');
+    })->name('tables');
 
     Route::get('virtual-reality', function () {
-		return view('virtual-reality');
-	})->name('virtual-reality');
+        return view('virtual-reality');
+    })->name('virtual-reality');
 
     Route::get('static-sign-in', function () {
-		return view('static-sign-in');
-	})->name('sign-in');
+        return view('static-sign-in');
+    })->name('sign-in');
 
     Route::get('static-sign-up', function () {
-		return view('static-sign-up');
-	})->name('sign-up');
+        return view('static-sign-up');
+    })->name('sign-up');
 
     Route::get('/logout', [SessionsController::class, 'destroy']);
-	Route::get('/user-profile', [InfoUserController::class, 'create']);
-	Route::post('/user-profile', [InfoUserController::class, 'store']);
+    Route::get('/user-profile', [InfoUserController::class, 'create']);
+    Route::post('/user-profile', [InfoUserController::class, 'store']);
     Route::get('/login', function () {
-		return view('dashboard');
-	})->name('sign-up');
+        return view('dashboard');
+    })->name('sign-up');
+
+    Route::get('/events', [EventController::class, 'index'])->name('event.index');
+    Route::post('/events', [EventController::class, 'store'])->name('event.store');
+    Route::get('/events/{event}', [EventController::class, 'show'])->name('event.show');
+    Route::post('/events/update/{id}', [EventController::class, 'update'])->name('event.update');
+    Route::get('/events-update/{event}', [EventController::class, 'getUpdate'])->name('event.getUpdate');
+    Route::post('/events/delete/{id}', [EventController::class, 'destroy'])->name('event.delete');
+    Route::get('/events-delete/{event}', [EventController::class, 'getDelete'])->name('event.getDelete');
 });
 
 
@@ -76,11 +85,10 @@ Route::group(['middleware' => 'guest'], function () {
     Route::post('/register', [RegisterController::class, 'store']);
     Route::get('/login', [SessionsController::class, 'create']);
     Route::post('/session', [SessionsController::class, 'store']);
-	Route::get('/login/forgot-password', [ResetController::class, 'create']);
-	Route::post('/forgot-password', [ResetController::class, 'sendEmail']);
-	Route::get('/reset-password/{token}', [ResetController::class, 'resetPass'])->name('password.reset');
-	Route::post('/reset-password', [ChangePasswordController::class, 'changePassword'])->name('password.update');
-
+    Route::get('/login/forgot-password', [ResetController::class, 'create']);
+    Route::post('/forgot-password', [ResetController::class, 'sendEmail']);
+    Route::get('/reset-password/{token}', [ResetController::class, 'resetPass'])->name('password.reset');
+    Route::post('/reset-password', [ChangePasswordController::class, 'changePassword'])->name('password.update');
 });
 
 Route::get('/login', function () {

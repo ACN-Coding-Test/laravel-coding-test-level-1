@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class EventRequest extends FormRequest
+class UpdateEventRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,9 +26,10 @@ class EventRequest extends FormRequest
     public function rules()
     {
         return [
-            'id' => 'sometimes|required|unique:events,id,except,id',
             'name' => 'nullable|string|max:255',
-            'slug' => 'nullable|max:255|unique:events,slug,except,id'
+            'slug' => 'nullable|max:255|unique:events,slug,except,id',
+            'start_at' => 'sometimes|required',
+            'end_at' => 'sometimes|required',
         ];
     }
 

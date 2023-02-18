@@ -3,9 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ActiveEventRequest;
-use App\Http\Requests\EventRequest;
+use App\Http\Requests\CreateEventRequest;
+use App\Http\Requests\UpdateEventRequest;
 use App\Models\Event;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Str;
 
 class EventController extends Controller
 {
@@ -16,9 +20,9 @@ class EventController extends Controller
      */
     public function index()
     {
-        $events = Event::paginate(10);
+        $events = Event::orderBy('created_at', 'desc')->paginate(10);
 
-        return $this->sendResponse('Events successfully retrieved', $events, 200);
+        return view('events.index', ['events' => $events]);
     }
 
     /**
@@ -27,15 +31,22 @@ class EventController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(EventRequest $request)
+    public function store(CreateEventRequest $request)
     {
-        $event = Event::create($request->validated());
+        $event = new Event();
+        $event->id = Str::uuid();
+        $event->name = $request->name;
+        $event->slug = $request->slug;
+        $event->start_at = Carbon::parse($request->start_at)->toDateTimeString();
+        $event->end_at = Carbon::parse($request->end_at)->toDateTimeString();
+        $event->save();
 
-        if ($event) {
-            return $this->sendResponse('Event successfully created', $event, 200);
-        }
+        return Redirect::back();
+    }
 
-        return $this->sendError('Failed to create event', null, 404);
+    public function show(Event $event)
+    {
+        return view('events.show', ['event' => $event]);
     }
 
     /**
@@ -44,9 +55,14 @@ class EventController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Event $event)
+    public function getUpdate(Event $event)
     {
-        return $this->sendResponse('Event successfully retrieved', $event, 200);
+        return view('events.update', ['event' => $event]);
+    }
+
+    public function getDelete(Event $event)
+    {
+        return view('events.delete', ['event' => $event]);
     }
 
     /**
@@ -56,15 +72,11 @@ class EventController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(EventRequest $request, $id)
+    public function update(UpdateEventRequest $request, $id)
     {
-        $event = Event::updateOrCreate(['id' => $id], $request->validated());
+        Event::updateOrCreate(['id' => $id], $request->validated());
 
-        if ($event) {
-            return $this->sendResponse('Event successfully updated or created', $event, 200);
-        }
-
-        return $this->sendError('Failed to update event', null, 404);
+        return redirect()->route('event.index');
     }
 
     /**
@@ -73,14 +85,13 @@ class EventController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Event $event)
+    public function destroy($id)
     {
-        $res = $event->delete();
+        $event = Event::find($id);
+        $event->delete();
+        return redirect()->route('event.index');
 
-        if ($res) {
-            return $this->sendResponse('Event successfully deleted', $event, 200);
-        }
-        return $this->sendError('Failed to delete event', null, 404);
+        return Redirect::back();
     }
 
     public function activeEvents(ActiveEventRequest $request)
