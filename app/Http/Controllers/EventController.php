@@ -9,6 +9,7 @@ use App\Models\Event;
 use App\Notifications\NotifyEventCreated;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Str;
@@ -35,7 +36,6 @@ class EventController extends Controller
      */
     public function store(CreateEventRequest $request)
     {
-
         $event = new Event();
         $event->id = Str::uuid();
         $event->name = $request->name;
@@ -55,7 +55,10 @@ class EventController extends Controller
 
     public function show(Event $event)
     {
-        return view('events.show', ['event' => $event]);
+        $data = Http::get('https://api.thecatapi.com/v1/images/search?limit=10')->json();
+        $cats = array_slice($data, 0, -2);
+
+        return view('events.show', ['event' => $event, 'cats' => $cats]);
     }
 
     /**
