@@ -70,9 +70,10 @@ Route::group(['middleware' => 'auth'], function () {
     })->name('sign-up');
 
     Route::get('/events', [EventController::class, 'index']);
+    Route::post('/events', [EventController::class, 'store'])->name('event.store');
+    Route::get('/events/{event}', [EventController::class, 'show']);
 });
 
-Route::get('/events/{event}', [EventController::class, 'show']);
 
 
 Route::group(['middleware' => 'guest'], function () {

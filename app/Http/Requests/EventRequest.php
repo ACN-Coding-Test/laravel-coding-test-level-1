@@ -28,7 +28,7 @@ class EventRequest extends FormRequest
         return [
             'id' => 'sometimes|required|unique:events,id,except,id',
             'name' => 'nullable|string|max:255',
-            'slug' => 'nullable|max:255|unique:events,slug,except,id'
+            'slug' => 'nullable|max:255|unique:events,slug,except,id',
         ];
     }
 

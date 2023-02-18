@@ -6,6 +6,8 @@ use App\Http\Requests\ActiveEventRequest;
 use App\Http\Requests\EventRequest;
 use App\Models\Event;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Str;
 
 class EventController extends Controller
 {
@@ -16,10 +18,9 @@ class EventController extends Controller
      */
     public function index()
     {
-        $events = Event::paginate(10);
+        $events = Event::orderBy('created_at', 'desc')->paginate(10);
 
         return view('events.index', ['events' => $events]);
-        // return $this->sendResponse('Events successfully retrieved', $events, 200);
     }
 
     /**
@@ -30,13 +31,15 @@ class EventController extends Controller
      */
     public function store(EventRequest $request)
     {
-        $event = Event::create($request->validated());
+        $event = new Event();
+        $event->id = Str::uuid();
+        $event->name = $request->name;
+        $event->slug = $request->slug;
+        $event->start_at = Carbon::parse($request->start_at)->toDateTimeString();
+        $event->end_at = Carbon::parse($request->end_at)->toDateTimeString();
+        $event->save();
 
-        if ($event) {
-            return $this->sendResponse('Event successfully created', $event, 200);
-        }
-
-        return $this->sendError('Failed to create event', null, 404);
+        return Redirect::back();
     }
 
     /**
@@ -48,8 +51,6 @@ class EventController extends Controller
     public function show(Event $event)
     {
         return view('events.show', ['event' => $event]);
-
-        // return $this->sendResponse('Event successfully retrieved', $event, 200);
     }
 
     /**
