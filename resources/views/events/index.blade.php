@@ -96,7 +96,7 @@
 </main>
 
 <!-- Add Event Modal -->
-<form action="{{ route('events.store') }}" method="POST" enctype="multipart/form-data" id="createForm"
+<form action="{{ route('event.store') }}" method="POST" enctype="multipart/form-data" id="createForm"
     class="need-validation">
     {{ csrf_field() }}
     <div class="modal fade" id="addEventModal" tabindex="-1" role="dialog" aria-labelledby="addEventModalTitle"

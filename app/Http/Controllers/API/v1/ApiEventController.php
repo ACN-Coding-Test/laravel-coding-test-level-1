@@ -9,8 +9,9 @@ use App\Http\Requests\UpdateEventRequest;
 use App\Models\Event;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
 
-class EventController extends Controller
+class ApiEventController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -36,7 +37,13 @@ class EventController extends Controller
      */
     public function store(CreateEventRequest $request)
     {
-        $event = Event::create($request->validated());
+        $event = new Event();
+        $event->id = Str::uuid();
+        $event->name = $request->name;
+        $event->slug = $request->slug;
+        $event->start_at = Carbon::parse($request->start_at)->toDateTimeString();
+        $event->end_at = Carbon::parse($request->end_at)->toDateTimeString();
+        $event->save();
 
         if ($event) {
             return $this->sendResponse('Event successfully created', $event, 200);

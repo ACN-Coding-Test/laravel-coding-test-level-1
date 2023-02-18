@@ -6,8 +6,10 @@ use App\Http\Requests\ActiveEventRequest;
 use App\Http\Requests\CreateEventRequest;
 use App\Http\Requests\UpdateEventRequest;
 use App\Models\Event;
+use App\Notifications\NotifyEventCreated;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Str;
 
@@ -33,6 +35,7 @@ class EventController extends Controller
      */
     public function store(CreateEventRequest $request)
     {
+
         $event = new Event();
         $event->id = Str::uuid();
         $event->name = $request->name;
@@ -40,6 +43,12 @@ class EventController extends Controller
         $event->start_at = Carbon::parse($request->start_at)->toDateTimeString();
         $event->end_at = Carbon::parse($request->end_at)->toDateTimeString();
         $event->save();
+
+        $user = auth()->user();
+        Notification::send($user, new NotifyEventCreated([
+            'subject' => 'New event created',
+            'message' => 'Your event has been successfully created',
+        ]));
 
         return Redirect::back();
     }

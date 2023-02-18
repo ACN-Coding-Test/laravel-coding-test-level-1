@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\API\v1\EventController;
+use App\Http\Controllers\API\v1\ApiEventController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,6 +20,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::group(['middleware' => 'auth'], function () {
-    Route::get('/v1/events/active-events', [EventController::class, 'activeEvents']);
-    Route::apiResource('/v1/events', EventController::class);
+    Route::get('/v1/events/active-events', [ApiEventController::class, 'activeEvents']);
+    Route::apiResource('/v1/events', ApiEventController::class);
 });
