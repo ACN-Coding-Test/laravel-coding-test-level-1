@@ -166,8 +166,8 @@
                 <p>This action is not reversible!</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn bg-gradient-danger">Delete</button>
                 <button type="button" class="btn btn-link  ml-auto" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn bg-gradient-danger">Delete</button>
             </div>
         </div>
     </div>

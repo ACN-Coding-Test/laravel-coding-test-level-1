@@ -72,6 +72,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/events', [EventController::class, 'index']);
 });
 
+Route::get('/events/{event}', [EventController::class, 'show']);
 
 
 Route::group(['middleware' => 'guest'], function () {

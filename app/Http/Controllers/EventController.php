@@ -47,7 +47,9 @@ class EventController extends Controller
      */
     public function show(Event $event)
     {
-        return $this->sendResponse('Event successfully retrieved', $event, 200);
+        return view('events.show', ['event' => $event]);
+
+        // return $this->sendResponse('Event successfully retrieved', $event, 200);
     }
 
     /**
