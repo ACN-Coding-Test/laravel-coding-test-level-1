@@ -31,27 +31,27 @@
                                             End At</th>
                                         <th
                                             class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                            Status</th>
-                                        <th
-                                            class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                             Action</th>
-                                        {{-- <th class="text-secondary opacity-7">Action</th> --}}
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($events as $event)
                                         <tr>
                                             <td>
-                                                <div class="d-flex px-2 py-1">
-                                                    <div>
-                                                        <img src="../assets/img/team-2.jpg"
-                                                            class="avatar avatar-sm me-3" alt="user1">
+                                                <a href="{{ route('event.show', ['event' => $event->id]) }}"
+                                                    type="button" class="text-secondary font-weight-bold text-xs">
+                                                    <div class="d-flex px-2 py-1">
+                                                        <div>
+                                                            <img src="../assets/img/team-2.jpg"
+                                                                class="avatar avatar-sm me-3" alt="user1">
+                                                        </div>
+                                                        <div class="d-flex flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">{{ $event->name }}</h6>
+                                                            <p class="text-xs text-secondary mb-0">{{ $event->slug }}
+                                                            </p>
+                                                        </div>
                                                     </div>
-                                                    <div class="d-flex flex-column justify-content-center">
-                                                        <h6 class="mb-0 text-sm">{{ $event->name }}</h6>
-                                                        <p class="text-xs text-secondary mb-0">{{ $event->slug }}</p>
-                                                    </div>
-                                                </div>
+                                                </a>
                                             </td>
                                             <td class="align-middle text-center">
                                                 <span
@@ -62,22 +62,17 @@
                                                     class="text-secondary text-xs font-weight-bold">{{ $event->end_at }}</span>
                                             </td>
                                             <td class="align-middle text-center text-sm">
-                                                <span class="badge badge-sm bg-gradient-success">Online</span>
-                                            </td>
-                                            <td class="align-middle text-center text-sm">
                                                 <div class="row">
                                                     <div class="col-6">
-                                                        <a href="{{ route('event.show', ['event' => $event->id]) }}"
+                                                        <a href="{{ route('event.getUpdate', ['event' => $event->id]) }}"
                                                             type="button"
                                                             class="text-secondary font-weight-bold text-xs">
                                                             Edit
                                                         </a>
                                                     </div>
                                                     <div class="col-6">
-                                                        <a href="javascript:;"
-                                                            class="text-danger font-weight-bold text-xs"
-                                                            data-toggle="tooltip" data-original-title="Edit event"
-                                                            data-bs-toggle="modal" data-bs-target="#deleteEventModal">
+                                                        <a href="{{ route('event.getDelete', ['event' => $event->id]) }}"
+                                                            type="button" class="text-danger font-weight-bold text-xs">
                                                             Delete
                                                         </a>
                                                     </div>
@@ -160,25 +155,3 @@
         </div>
     </div>
 </form>
-
-<!-- Delete Event Modal -->
-<div class="modal fade" id="deleteEventModal" tabindex="-1" role="dialog" aria-labelledby="deleteEventModal"
-    aria-hidden="true">
-    <div class="modal-dialog modal- modal-dialog-centered modal-" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h6 class="modal-title" id="modal-title-default">Confirm to delete this event?</h6>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>This action is not reversible!</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-link  ml-auto" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn bg-gradient-danger">Delete</button>
-            </div>
-        </div>
-    </div>
-</div>

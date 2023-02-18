@@ -1,42 +1,55 @@
 @extends('layouts.app')
 
-<div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Edit event</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">×</span>
-            </button>
-        </div>
-        <form action="{{ route('event.update', ['id' => $event->id]) }}" method="POST" enctype="multipart/form-data"
-            id="editEventModal" class="need-validation">
-            {{ csrf_field() }}
-            <div class="modal-body">
-                <input id="id" name="id" type="hidden" value="">
-                <div class="form-group">
-                    <label for="name" class="form-control-label">Name</label>
-                    <input type="text" class="form-control" id="name" name="name"
-                        value="{{ $event->name }}">
-                </div>
-                <div class="form-group">
-                    <label for="start_at" class="form-control-label">Start at</label>
-                    <input class="form-control" type="datetime-local" id="start_at" name="start_at"
-                        value="{{ Carbon\Carbon::parse($event->start_at)->toDateTimeLocalString() }}">
-                </div>
-                <div class="form-group">
-                    <label for="end_at" class="form-control-label">End at</label>
-                    <input class="form-control" type="datetime-local" id="end_at" name="end_at"
-                        value="{{ Carbon\Carbon::parse($event->end_at)->toDateTimeLocalString() }}">
-                </div>
-                <div class="form-group">
-                    <label for="slug" class="form-control-label">Description</label>
-                    <textarea class="form-control" id="slug" name="slug">{{ $event->slug }}</textarea>
+<div class="container-fluid">
+    <div class="page-header min-height-300 border-radius-xl mt-4"
+        style="background-image: url('../assets/img/curved-images/curved0.jpg'); background-position-y: 50%;">
+        <span class="mask bg-gradient-primary opacity-6"></span>
+    </div>
+    <div class="card card-body blur shadow-blur mx-4 mt-n6">
+        <div class="row gx-4">
+            <div class="col-auto">
+                <div class="avatar avatar-xl position-relative">
+                    <img src="../assets/img/bruce-mars.jpg" alt="..." class="w-100 border-radius-lg shadow-sm">
                 </div>
             </div>
-            <div class="modal-footer">
-                <a href="{{ route('event.index') }}" class="btn bg-gradient-secondary">Close</a>
-                <button type="submit" class="btn bg-gradient-primary">Submit</button>
-        </form>
+            <div class="col-auto my-auto">
+                <div class="h-100">
+                    <h5 class="mb-1">
+                        {{ $event->name }}
+                    </h5>
+                    <p class="mb-3 font-weight-bold text-sm">
+                        {{ $event->slug }}
+                    </p>
+                    <div class="row">
+                        <div class="col">
+                            <h6>Start at</h6>
+                            <p class="mb-0 font-weight-bold text-sm">
+                                {{ $event->start_at }}
+                            </p>
+                        </div>
+                        <div class="col">
+                            <h6>End at</h6>
+                            <p class="mb-0 font-weight-bold text-sm">
+                                {{ $event->end_at }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 my-sm-auto ms-sm-auto me-sm-0 mx-auto mt-3 row text-right">
+                <div class="col">
+                    <a href="{{ route('event.getUpdate', ['event' => $event->id]) }}" type="button"
+                        class="btn bg-gradient-secondary font-weight-bold text-sm">
+                        Edit
+                    </a>
+                </div>
+                <div class="col">
+                    <a href="{{ route('event.getDelete', ['event' => $event->id]) }}" type="button"
+                        class="btn btn-outline-danger font-weight-bold text-xs">
+                        Delete
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
 </div>

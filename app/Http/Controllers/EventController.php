@@ -7,6 +7,7 @@ use App\Http\Requests\CreateEventRequest;
 use App\Http\Requests\UpdateEventRequest;
 use App\Models\Event;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Str;
 
@@ -43,15 +44,25 @@ class EventController extends Controller
         return Redirect::back();
     }
 
+    public function show(Event $event)
+    {
+        return view('events.show', ['event' => $event]);
+    }
+
     /**
      * Display the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Event $event)
+    public function getUpdate(Event $event)
     {
-        return view('events.show', ['event' => $event]);
+        return view('events.update', ['event' => $event]);
+    }
+
+    public function getDelete(Event $event)
+    {
+        return view('events.delete', ['event' => $event]);
     }
 
     /**
@@ -65,8 +76,6 @@ class EventController extends Controller
     {
         Event::updateOrCreate(['id' => $id], $request->validated());
 
-        $events = Event::orderBy('created_at', 'desc')->paginate(10);
-
         return redirect()->route('event.index');
     }
 
@@ -76,14 +85,13 @@ class EventController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Event $event)
+    public function destroy($id)
     {
-        $res = $event->delete();
+        $event = Event::find($id);
+        $event->delete();
+        return redirect()->route('event.index');
 
-        if ($res) {
-            return $this->sendResponse('Event successfully deleted', $event, 200);
-        }
-        return $this->sendError('Failed to delete event', null, 404);
+        return Redirect::back();
     }
 
     public function activeEvents(ActiveEventRequest $request)
