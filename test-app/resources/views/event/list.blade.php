@@ -4,6 +4,7 @@
 <div class="my-3">
 	<h1 class="my-3">Event Listing</h1>
 	<a href="http://127.0.0.1:8000/events/create" class="btn btn-primary my-3" id="btn-create">Create</a>
+	<a href="http://127.0.0.1:8000/cats" class="btn btn-primary my-3" id="btn-create">Something Cute!</a>
 	<table class="table" id="event-tbl">
 		<thead>
 			<tr>

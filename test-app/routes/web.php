@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\CatController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,5 +36,6 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/events', [EventController::class, 'index']);
 Route::get('/events/{id}', [EventController::class, 'show']);
+Route::get('/cats', [CatController::class, 'index']);
 
 require __DIR__.'/auth.php';
