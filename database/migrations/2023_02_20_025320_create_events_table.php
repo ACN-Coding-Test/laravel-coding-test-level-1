@@ -17,6 +17,9 @@ return new class extends Migration
             $table->uuid('uuid')->unique();
             $table->string('name');
             $table->string('slug')->unique();
+            $table->dateTime('startAt');
+            $table->dateTime('endAt');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
